@@ -61,7 +61,8 @@ public class AuthController {
 
         log.info("POST /auth/login - usuario: {}", req.getUsername());
         AuthResponse res = service.login(req);
-
+        
+        
         return ResponseEntity.ok(
                 com.example.ms_auth.dto.ApiResponse.<AuthResponse>builder()
                         .success(true)
