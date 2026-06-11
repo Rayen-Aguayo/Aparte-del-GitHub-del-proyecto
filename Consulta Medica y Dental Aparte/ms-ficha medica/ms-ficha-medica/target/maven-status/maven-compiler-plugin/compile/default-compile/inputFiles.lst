@@ -1,0 +1,17 @@
+C:\Users\Rayen\Desktop\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-ficha medica\ms-ficha-medica\src\main\java\com\example\ms_ficha\medica\client\MedicoClient.java
+C:\Users\Rayen\Desktop\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-ficha medica\ms-ficha-medica\src\main\java\com\example\ms_ficha\medica\client\PacienteClient.java
+C:\Users\Rayen\Desktop\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-ficha medica\ms-ficha-medica\src\main\java\com\example\ms_ficha\medica\config\SecurityConfig.java
+C:\Users\Rayen\Desktop\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-ficha medica\ms-ficha-medica\src\main\java\com\example\ms_ficha\medica\config\WebClientConfig.java
+C:\Users\Rayen\Desktop\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-ficha medica\ms-ficha-medica\src\main\java\com\example\ms_ficha\medica\controller\FichaMedicaController.java
+C:\Users\Rayen\Desktop\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-ficha medica\ms-ficha-medica\src\main\java\com\example\ms_ficha\medica\dto\ApiResponse.java
+C:\Users\Rayen\Desktop\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-ficha medica\ms-ficha-medica\src\main\java\com\example\ms_ficha\medica\dto\FichaMedicaDTO.java
+C:\Users\Rayen\Desktop\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-ficha medica\ms-ficha-medica\src\main\java\com\example\ms_ficha\medica\dto\FichaMedicaResponse.java
+C:\Users\Rayen\Desktop\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-ficha medica\ms-ficha-medica\src\main\java\com\example\ms_ficha\medica\dto\MedicoResponse.java
+C:\Users\Rayen\Desktop\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-ficha medica\ms-ficha-medica\src\main\java\com\example\ms_ficha\medica\dto\PacienteResponse.java
+C:\Users\Rayen\Desktop\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-ficha medica\ms-ficha-medica\src\main\java\com\example\ms_ficha\medica\exception\GlobalExceptionHandler.java
+C:\Users\Rayen\Desktop\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-ficha medica\ms-ficha-medica\src\main\java\com\example\ms_ficha\medica\model\FichaMedica.java
+C:\Users\Rayen\Desktop\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-ficha medica\ms-ficha-medica\src\main\java\com\example\ms_ficha\medica\MsFichaMedicaApplication.java
+C:\Users\Rayen\Desktop\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-ficha medica\ms-ficha-medica\src\main\java\com\example\ms_ficha\medica\repository\FichaMedicaRepository.java
+C:\Users\Rayen\Desktop\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-ficha medica\ms-ficha-medica\src\main\java\com\example\ms_ficha\medica\security\JwtFilter.java
+C:\Users\Rayen\Desktop\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-ficha medica\ms-ficha-medica\src\main\java\com\example\ms_ficha\medica\security\JwtUtil.java
+C:\Users\Rayen\Desktop\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-ficha medica\ms-ficha-medica\src\main\java\com\example\ms_ficha\medica\service\FichaMedicaService.java
