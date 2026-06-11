@@ -23,12 +23,51 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "Facturación y Presupuesto", description = "Operaciones relacionadas con la gestión de cobros y presupuestos médicos")
 @RestController
 @RequestMapping("/api/v1/facturacio-y-presupuesto")
 @RequiredArgsConstructor
 public class FacturacionYPresupuesto {
+
     private final FacturacionYPresupuestoService facturacionYPresupuestoService;
 
+    @Operation(
+        summary = "Listar facturaciones y presupuestos",
+        description = "Retorna todos los registros de facturación del sistema. Requiere rol USER o ADMIN."
+    )
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Listado obtenido correctamente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
+    })
+    @GetMapping
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<ApiResponse<List<FacturacionYPresupuestoResponse>>> listar(
+            @Parameter(description = "Token JWT con formato Bearer", example = "Bearer eyJhbG...")
+            @RequestHeader("Authorization") String token) {
+
+        return ResponseEntity.ok(
+                ApiResponse.<List<FacturacionYPresupuestoResponse>>builder()
+                        .success(true)
+                        .message("Listado obtenido")
+                        .data(facturacionYPresupuestoService.listar(token))
+                        .build()
+        );
+    }
+
+    @Operation(
+        summary = "Crear registro de facturación",
+        description = "Crea un nuevo cobro o presupuesto. Requiere rol ADMIN."
+    )
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Registro creado exitosamente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Datos de entrada inválidos")
+    })
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ApiResponse<FacturacionYPresupuestoResponse>> crear(
@@ -38,28 +77,20 @@ public class FacturacionYPresupuesto {
         return ResponseEntity.status(201).body(
                 ApiResponse.<FacturacionYPresupuestoResponse>builder()
                         .success(true)
-                        .message("Registro de atenciones creado")
+                        .message("Registro de facturación creado")
                         .data(facturacionYPresupuestoService.crear(dto, token))
                         .build()
         );
     }
 
-    @GetMapping
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<ApiResponse<List<FacturacionYPresupuestoResponse>>> listar(
-            @RequestHeader("Authorization") String token) {
-
-        return ResponseEntity.ok(
-                ApiResponse.<List<FacturacionYPresupuestoResponse>>builder()
-                        .success(true)
-                        .data(facturacionYPresupuestoService.listar(token))
-                        .build()
-        );
-    }
-
+    @Operation(
+        summary = "Obtener facturación por ID",
+        description = "Busca un cobro o presupuesto específico utilizando su identificador único."
+    )
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<ApiResponse<FacturacionYPresupuestoResponse>> obtener(
+            @Parameter(description = "ID del registro de facturación", example = "1")
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
 
@@ -71,6 +102,10 @@ public class FacturacionYPresupuesto {
         );
     }
 
+    @Operation(
+        summary = "Actualizar facturación por ID",
+        description = "Modifica los datos de un registro de facturación existente. Requiere rol ADMIN."
+    )
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ApiResponse<FacturacionYPresupuestoResponse>> actualizar(
@@ -81,12 +116,16 @@ public class FacturacionYPresupuesto {
         return ResponseEntity.ok(
                 ApiResponse.<FacturacionYPresupuestoResponse>builder()
                         .success(true)
-                        .message("Registro de atenciones actualizado")
+                        .message("Registro de facturación actualizado")
                         .data(facturacionYPresupuestoService.actualizar(id, dto, token))
                         .build()
         );
     }
 
+    @Operation(
+        summary = "Eliminar facturación por ID",
+        description = "Remueve permanentemente un registro del sistema. Requiere rol ADMIN."
+    )
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ApiResponse<Void>> eliminar(@PathVariable Long id) {
@@ -96,7 +135,7 @@ public class FacturacionYPresupuesto {
         return ResponseEntity.ok(
                 ApiResponse.<Void>builder()
                         .success(true)
-                        .message("Registro de atenciones eliminado")
+                        .message("Registro de facturación eliminado")
                         .build()
         );
     }
