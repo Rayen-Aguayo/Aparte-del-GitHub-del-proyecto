@@ -4,18 +4,14 @@ import org.springframework.context.annotation.*;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.*;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import org.springframework.security.web.access.AccessDeniedHandler;
 
 import com.example.ms_facturacion.y.presupuesto.dto.ApiResponse;
 import com.example.ms_facturacion.y.presupuesto.security.JwtFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import jakarta.servlet.http.HttpServletResponse;
 
 @Configuration
@@ -32,6 +28,11 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
+                    .requestMatchers(
+                            "/swagger-ui/**",
+                            "/swagger-ui.html",
+                            "/v3/api-docs/**"
+                    ).permitAll()
                     .anyRequest().authenticated()
             )
             .exceptionHandling(ex -> ex
@@ -46,15 +47,12 @@ public class SecurityConfig {
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
         return (request, response, accessDeniedException) -> {
-
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.setContentType("application/json");
-
             ApiResponse<Object> res = ApiResponse.builder()
                     .success(false)
                     .message("Acceso denegado")
                     .build();
-
             new ObjectMapper().writeValue(response.getOutputStream(), res);
         };
     }
@@ -62,15 +60,12 @@ public class SecurityConfig {
     @Bean
     public AuthenticationEntryPoint authenticationEntryPoint() {
         return (request, response, authException) -> {
-
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
-
             ApiResponse<Object> res = ApiResponse.builder()
                     .success(false)
                     .message("No autenticado o token inválido")
                     .build();
-
             new ObjectMapper().writeValue(response.getOutputStream(), res);
         };
     }
