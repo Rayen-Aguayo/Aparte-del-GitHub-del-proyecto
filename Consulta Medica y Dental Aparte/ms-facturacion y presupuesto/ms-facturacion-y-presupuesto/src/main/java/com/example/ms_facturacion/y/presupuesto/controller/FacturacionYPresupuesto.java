@@ -45,10 +45,10 @@ public class FacturacionYPresupuesto {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
     })
+
     @GetMapping
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<ApiResponse<List<FacturacionYPresupuestoResponse>>> listar(
-            @Parameter(description = "Token JWT con formato Bearer", example = "Bearer eyJhbG...")
             @RequestHeader("Authorization") String token) {
 
         return ResponseEntity.ok(
@@ -68,6 +68,7 @@ public class FacturacionYPresupuesto {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Registro creado exitosamente"),
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Datos de entrada inválidos")
     })
+
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ApiResponse<FacturacionYPresupuestoResponse>> crear(
@@ -87,6 +88,7 @@ public class FacturacionYPresupuesto {
         summary = "Obtener facturación por ID",
         description = "Busca un cobro o presupuesto específico utilizando su identificador único."
     )
+
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<ApiResponse<FacturacionYPresupuestoResponse>> obtener(
@@ -106,6 +108,7 @@ public class FacturacionYPresupuesto {
         summary = "Actualizar facturación por ID",
         description = "Modifica los datos de un registro de facturación existente. Requiere rol ADMIN."
     )
+    
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ApiResponse<FacturacionYPresupuestoResponse>> actualizar(

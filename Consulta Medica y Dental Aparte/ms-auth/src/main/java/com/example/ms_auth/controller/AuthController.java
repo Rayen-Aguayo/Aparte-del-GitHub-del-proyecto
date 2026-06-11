@@ -31,6 +31,7 @@ public class AuthController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Usuario registrado exitosamente"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Solicitud inválida o el usuario ya existe")
     })
+    
     @PostMapping("/register")
     public ResponseEntity<com.example.ms_auth.dto.ApiResponse<AuthResponse>> register(@Valid @RequestBody RegisterRequest req) {
         log.info("POST /auth/register - usuario: {}", req.getUsername());
@@ -55,6 +56,7 @@ public class AuthController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Solicitud inválida"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Credenciales inválidas")
     })
+
     @PostMapping("/login")
     public ResponseEntity<com.example.ms_auth.dto.ApiResponse<AuthResponse>> login(
             @Valid @RequestBody LoginRequest req) {
@@ -81,6 +83,7 @@ public class AuthController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Solicitud inválida"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Refresh token inválido o expirado")
     })
+
     @PostMapping("/refresh")
     public ResponseEntity<com.example.ms_auth.dto.ApiResponse<AuthResponse>> refresh(@RequestBody RefreshRequest req) {
         log.info("POST /auth/refresh - procesando renovación");
