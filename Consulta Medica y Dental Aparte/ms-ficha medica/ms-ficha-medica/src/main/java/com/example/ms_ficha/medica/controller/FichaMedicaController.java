@@ -40,7 +40,6 @@ public class FichaMedicaController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<FichaMedicaResponse>> crear(
             @Valid @RequestBody FichaMedicaDTO dto,
-            @Parameter(description = "Token JWT de autenticación con formato Bearer", example = "Bearer eyJhbGciOiJIUzI1NiJ9...")
             @RequestHeader("Authorization") String token) {
 
         return ResponseEntity.status(201).body(
@@ -61,11 +60,10 @@ public class FichaMedicaController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado (Se requiere rol ADMIN)")
     })
-    
+
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<List<FichaMedicaResponse>>> listar(
-            @Parameter(description = "Token JWT de autenticación con formato Bearer", example = "Bearer eyJhbGciOiJIUzI1NiJ9...")
             @RequestHeader("Authorization") String token) {
 
         return ResponseEntity.ok(
@@ -93,8 +91,8 @@ public class FichaMedicaController {
     public ResponseEntity<ApiResponse<FichaMedicaResponse>> obtener(
             @Parameter(description = "Identificador único de la ficha médica", example = "1")
             @PathVariable Long id, 
-            @Parameter(description = "Token JWT de autenticación con formato Bearer", example = "Bearer eyJhbGciOiJIUzI1NiJ9...")
             @RequestHeader("Authorization") String token) {
+        
         return ResponseEntity.ok(
                 ApiResponse.<FichaMedicaResponse>builder()
                         .success(true)
@@ -121,7 +119,6 @@ public class FichaMedicaController {
             @Parameter(description = "Identificador único de la ficha médica", example = "1")
             @PathVariable Long id,
             @Valid @RequestBody FichaMedicaDTO dto,
-            @Parameter(description = "Token JWT de autenticación con formato Bearer", example = "Bearer eyJhbGciOiJIUzI1NiJ9...")
             @RequestHeader("Authorization") String token) {
 
         return ResponseEntity.ok(
@@ -150,6 +147,7 @@ public class FichaMedicaController {
             @Parameter(description = "Identificador único de la ficha médica", example = "1")
             @PathVariable Long id) {
         fichaMedicaService.eliminar(id);
+        
         return ResponseEntity.ok(
                 ApiResponse.<Void>builder()
                         .success(true)
