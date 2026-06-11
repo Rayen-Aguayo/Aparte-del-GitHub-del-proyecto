@@ -15,7 +15,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "Autenticación", description = "Operaciones de registro, login y renovación de token")
-
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -23,10 +22,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class AuthController {
 
     private final AuthService service;
+
     @Operation(
             summary = "Registrar usuario",
             description = "Crea un nuevo usuario en el sistema"
     )
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Usuario registrado exitosamente"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Solicitud inválida o el usuario ya existe")
+    })
     @PostMapping("/register")
     public ResponseEntity<com.example.ms_auth.dto.ApiResponse<AuthResponse>> register(@Valid @RequestBody RegisterRequest req) {
         log.info("POST /auth/register - usuario: {}", req.getUsername());
@@ -68,18 +72,17 @@ public class AuthController {
     }
 
     @Operation(
-        summary = "Renovar token",
-        description = "Genera un nuevo access token utilizando un refresh token válido"
+            summary = "Renovar token",
+            description = "Genera un nuevo access token utilizando un refresh token válido"
     )
     @ApiResponses(value = {
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Token renovado correctamente"),
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Solicitud inválida"),
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401",description = "Refresh token inválido o expirado")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Token renovado correctamente"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Solicitud inválida"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Refresh token inválido o expirado")
     })
-
     @PostMapping("/refresh")
     public ResponseEntity<com.example.ms_auth.dto.ApiResponse<AuthResponse>> refresh(@RequestBody RefreshRequest req) {
-
+        log.info("POST /auth/refresh - procesando renovación");
         AuthResponse res = service.refresh(req.getRefreshToken());
 
         return ResponseEntity.ok(
