@@ -103,23 +103,35 @@ public class FacturacionYPresupuestoController {
 
         EntityModel<FacturacionYPresupuestoResponse> recurso = EntityModel.of(FacturacionYPresupuesto);
 
+
+           recurso.add(
+            linkTo(methodOn(FacturacionYPresupuestoController.class).obtener(id, token))
+                    .withSelfRel()
+        );
+
         recurso.add(
-                linkTo(methodOn(FacturacionYPresupuestoController.class).crear(null, token))
-                        .withRel("create"));
-        
+                linkTo(methodOn(FacturacionYPresupuestoController.class).listar(token))
+                        .withRel("all")
+        );
+
+        recurso.add(
+                linkTo(methodOn(FacturacionYPresupuestoController.class).actualizar(id, null, token))
+                        .withRel("update")
+        );
+
         recurso.add(
                 linkTo(methodOn(FacturacionYPresupuestoController.class).eliminar(id))
-                        .withRel("delete"));
-                                recurso.add();
-                                
-
-        return ResponseEntity.ok(
-                ApiResponse.<FacturacionYPresupuestoResponse>builder()
-                        .success(true)
-                        .data(facturacionYPresupuestoService.obtener(id, token))
-                        .build()
+                        .withRel("delete")
         );
-    }
+
+            return ResponseEntity.ok(
+                    ApiResponse.<FacturacionYPresupuestoResponse>builder()
+                            .success(true)
+                            .data(facturacionYPresupuestoService.obtener(id, token))
+                            .build()
+            );
+        
+        }
 
     @Operation(
         summary = "Actualizar facturación por ID",
