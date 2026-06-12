@@ -1,4 +1,4 @@
-package com.example.Receta.Medica.exception;
+package com.example.ms_receta.medica.exception;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package com.example.Receta.Medica.security;
+package com.example.ms_receta.medica.security;
 
 import java.io.IOException;
 import java.util.List;

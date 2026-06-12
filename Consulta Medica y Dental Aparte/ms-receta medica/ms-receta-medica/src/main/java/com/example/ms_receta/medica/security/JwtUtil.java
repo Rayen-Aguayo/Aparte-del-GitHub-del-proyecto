@@ -1,4 +1,4 @@
-package com.example.Receta.Medica.security;
+package com.example.ms_receta.medica.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
