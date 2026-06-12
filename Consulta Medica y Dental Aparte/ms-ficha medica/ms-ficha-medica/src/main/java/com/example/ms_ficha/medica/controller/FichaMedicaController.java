@@ -1,6 +1,8 @@
 package com.example.ms_ficha.medica.controller;
 
 import java.util.List;
+
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @Tag(name = "Fichas Medicas", description = "Operaciones relacionadas con Fichas Medicas")
 @RestController
@@ -92,6 +96,31 @@ public class FichaMedicaController {
             @Parameter(description = "Identificador único de la ficha médica", example = "1")
             @PathVariable Long id, 
             @RequestHeader("Authorization") String token) {
+        
+        FichaMedicaResponse FichaMedica = fichaMedicaService.obtener(id, token);
+
+        EntityModel<FichaMedicaResponse> recurso = EntityModel.of(FichaMedica);
+
+
+           recurso.add(
+            linkTo(methodOn(FichaMedicaController.class).obtener(id, token))
+                    .withSelfRel()
+        );
+
+        recurso.add(
+                linkTo(methodOn(FichaMedicaController.class).listar(token))
+                        .withRel("all")
+        );
+
+        recurso.add(
+                linkTo(methodOn(FichaMedicaController.class).actualizar(id, null, token))
+                        .withRel("update")
+        );
+
+        recurso.add(
+                linkTo(methodOn(FichaMedicaController.class).eliminar(id))
+                        .withRel("delete")
+        );
         
         return ResponseEntity.ok(
                 ApiResponse.<FichaMedicaResponse>builder()
