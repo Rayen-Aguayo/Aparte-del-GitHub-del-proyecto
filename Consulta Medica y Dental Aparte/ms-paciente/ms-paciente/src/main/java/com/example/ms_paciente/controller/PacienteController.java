@@ -81,27 +81,42 @@ public class PacienteController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
     })
-    @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<ApiResponse<List<Paciente>>> listar() {
-        return ResponseEntity.ok(
+        @GetMapping
+        @PreAuthorize("hasRole('ADMIN')")
+        public ResponseEntity<ApiResponse<List<EntityModel<Paciente>>>> listar() {
+
+        List<EntityModel<Paciente>> recursos = pacienteService.listar()
+                .stream()
+                .map(paciente -> {
+                        EntityModel<Paciente> recurso = EntityModel.of(paciente);
+
+                        
+                        recurso.add(
+                                linkTo(methodOn(PacienteController.class).obtener(paciente.getRun()))
+                                        .withSelfRel());
+
+                        
+                        recurso.add(
+                                linkTo(methodOn(PacienteController.class).actualizar(paciente.getRun(), null))
+                                        .withRel("actualizar"));
 
         
-        Paciente paciente = pacienteService.obtener(run);
+                        recurso.add(
+                                linkTo(methodOn(PacienteController.class).eliminar(paciente.getRun()))
+                                        .withRel("eliminar"));
 
-        EntityModel<Paciente> recurso = EntityModel.of(paciente);
+                        return recurso;
+                })
+                .toList();
 
-        recurso.add(
-                linkTo(methodOn(PacienteController.class).obtener(run))
-                        .withSelfRel());
-
-                ApiResponse.<List<Paciente>>builder()
+        return ResponseEntity.ok(
+                ApiResponse.<List<EntityModel<Paciente>>>builder()
                         .success(true)
                         .message("Listado obtenido")
-                        .data(pacienteService.listar())
+                        .data(recursos)
                         .build()
         );
-    }
+        }
 
     @Operation(
         summary = "Obtener paciente por su run",
@@ -163,7 +178,17 @@ public class PacienteController {
         @Parameter(description = "RUN del paciente", example = "11111111-1")
         @PathVariable String run,
         @Valid @RequestBody PacienteDTO dto) {
+        
+        Paciente paciente = pacienteService.actualizar(run, null);
+        EntityModel<Paciente> recurso = EntityModel.of(paciente);
 
+        recurso.add(
+        linkTo(methodOn(PacienteController.class).listar())
+                .withRel("all"));
+        
+        recurso.add(
+        linkTo(methodOn(PacienteController.class).obtener(run))
+                .withSelfRel());
 
 
         return ResponseEntity.ok(
