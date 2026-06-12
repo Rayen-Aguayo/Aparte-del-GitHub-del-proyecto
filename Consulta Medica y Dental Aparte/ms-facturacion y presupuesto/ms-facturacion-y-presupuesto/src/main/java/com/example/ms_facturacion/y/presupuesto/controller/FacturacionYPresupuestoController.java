@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,11 +29,14 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import org.springframework.hateoas.EntityModel;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 @Tag(name = "Facturación y Presupuesto", description = "Operaciones relacionadas con la gestión de cobros y presupuestos médicos")
 @RestController
 @RequestMapping("/api/v1/facturacio-y-presupuesto")
 @RequiredArgsConstructor
-public class FacturacionYPresupuesto {
+public class FacturacionYPresupuestoController {
 
     private final FacturacionYPresupuestoService facturacionYPresupuestoService;
 
@@ -95,6 +99,20 @@ public class FacturacionYPresupuesto {
             @Parameter(description = "ID del registro de facturación", example = "1")
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
+        
+        FacturacionYPresupuestoResponse FacturacionYPresupuesto = facturacionYPresupuestoService.obtener(id, token);
+
+        EntityModel<FacturacionYPresupuestoResponse> recurso = EntityModel.of(FacturacionYPresupuesto);
+
+        recurso.add(
+                linkTo(methodOn(FacturacionYPresupuestoController.class).crear(null, token))
+                        .withRel("create"));
+        
+        recurso.add(
+                linkTo(methodOn(FacturacionYPresupuestoController.class).eliminar(id))
+                        .withRel("delete"));
+                                recurso.add();
+                                
 
         return ResponseEntity.ok(
                 ApiResponse.<FacturacionYPresupuestoResponse>builder()
