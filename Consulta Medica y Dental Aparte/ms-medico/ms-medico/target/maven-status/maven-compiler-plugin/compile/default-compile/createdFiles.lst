@@ -1,0 +1,12 @@
+com\example\ms_medico\MsMedicoApplication.class
+com\example\ms_medico\exception\GlobalExceptionHandler.class
+com\example\ms_medico\controller\MedicoController.class
+com\example\ms_medico\dto\ApiResponse$ApiResponseBuilder.class
+com\example\ms_medico\repository\MedicoRepository.class
+com\example\ms_medico\dto\MedicoDTO.class
+com\example\ms_medico\dto\ApiResponse.class
+com\example\ms_medico\model\Medico.class
+com\example\ms_medico\config\SecurityConfig.class
+com\example\ms_medico\security\JwtUtil.class
+com\example\ms_medico\service\MedicoService.class
+com\example\ms_medico\security\JwtFilter.class
