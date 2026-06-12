@@ -107,9 +107,24 @@ public class MedicoController {
         );
     }
 
+    @Operation(
+            summary = "Actualizar Medico por Run",
+            description = "Modifica los datos de un Medico existente. Requiere rol USER o ADMIN."
+    )
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Medico/a actualizada con éxito"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Datos de actualización inválidos"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Medico/a no encontrada")
+    })
+
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Medico>> actualizar(@PathVariable String id, @Valid @RequestBody MedicoDTO dto) {
+    public ResponseEntity<ApiResponse<Medico>> actualizar(
+        @Parameter(description = "Identificador único del médico (RUN)", example = "12345678-9")
+        @PathVariable String id,           
+        @RequestHeader("Authorization") MedicoDTO dto){
 
         Medico medico = medicoService.actualizar(id, dto);
 
@@ -122,9 +137,22 @@ public class MedicoController {
         );
     }
 
+    @Operation(
+            summary = "Eliminar (anular) Medico por Run",
+            description = "Elimina o deja sin efecto un/a Medico del sistema. Requiere rol USER o ADMIN."
+    )
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Medico/a eliminada/anulada con éxito"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Medico/a no encontrada")
+    })
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Void>> eliminar(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> eliminar(
+            @Parameter(description = "Identificador único de la ficha médica", example = "1")
+            @PathVariable String id) {
 
         medicoService.eliminar(id);
 
