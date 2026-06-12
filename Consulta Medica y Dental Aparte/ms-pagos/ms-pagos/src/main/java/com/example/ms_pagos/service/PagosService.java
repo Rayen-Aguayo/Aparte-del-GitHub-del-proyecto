@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.example.ms_pagos.client.PacienteClient;
 import com.example.ms_pagos.dto.PagosDTO;
 import com.example.ms_pagos.dto.PagosResponse;
+import com.example.ms_pagos.model.Pagos;
 import com.example.ms_pagos.repository.PagosRepository;
 
 import jakarta.persistence.EntityNotFoundException;
