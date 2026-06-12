@@ -4,11 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.Pagos.client.PacienteClient;
-import com.example.Pagos.dto.PagosDTO;
-import com.example.Pagos.dto.PagosResponse;
-import com.example.Pagos.model.Pagos;
-import com.example.Pagos.repository.PagosRepository;
+import com.example.ms_pagos.client.PacienteClient;
+import com.example.ms_pagos.dto.PagosDTO;
+import com.example.ms_pagos.dto.PagosResponse;
+import com.example.ms_pagos.repository.PagosRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
