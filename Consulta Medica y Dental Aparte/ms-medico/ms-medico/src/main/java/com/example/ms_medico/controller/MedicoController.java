@@ -19,15 +19,32 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
+@Tag(name = "Medicos", description = "Operaciones relacionadas con Medicos")
 @RestController
 @RequestMapping("api/v1/medicos")
 @RequiredArgsConstructor
 public class MedicoController {
     private final MedicoService medicoService;
+
+    @Operation(
+        summary = "Crear Medicos",
+        description = "Registrar un nuevo Medico en el sistema. Requiere rol USER o ADMIN."
+    )
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Medico creado exitosamente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Datos de entrada inválidos"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado (Se requiere rol ADMIN)")
+    })
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -42,6 +59,16 @@ public class MedicoController {
                         .build()
         );
     }
+
+    @Operation(
+        summary = "Listar Medicos",
+        description = "Retorna todos los autores registrados. Requiere rol USER o ADMIN."
+    )
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Listado obtenido"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
+    })
     
     @GetMapping
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
@@ -56,18 +83,33 @@ public class MedicoController {
         );
     }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Medico>> obtener(@PathVariable String id) {
+    @Operation(
+            summary = "Obtener ficha médica por ID",
+            description = "Busca y retorna los detalles de una ficha médica mediante su identificador único. Requiere rol USER o ADMIN."
+    )
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Medico/a encontrado/a"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Medico/a no encontrado/a")
+    })
 
-        return ResponseEntity.ok(
-                ApiResponse.<Medico>builder()
-                        .success(true)
-                        .message("Medico obtenido")
-                        .data(medicoService.obtener(id))
-                        .build()
-        );
-    }
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<ApiResponse<Medico>> obtener(
+        @Parameter(description = "Identificador único de la ficha médica", example = "1")
+        @PathVariable Long id,
+        @RequestHeader("Authorization") String token) {
+
+    return ResponseEntity.ok(
+            ApiResponse.<Medico>builder()
+                    .success(true)
+                    .message("Medico obtenido")
+                    .data(medicoService.obtener(id))
+                    .build()
+    );
+}
+
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")

@@ -35,17 +35,17 @@ public class MedicoService {
         return medicoRepository.findAll();
     }
 
-    public Medico obtener(String id) {
-        log.info("Obtener Medicos", keyValue("run", id));
+    public Medico obtener(String id) {              
+        log.info("Obtener Medico", keyValue("run", id));
 
         return medicoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Medico no encontrado"));
+            .orElseThrow(() -> new EntityNotFoundException("Medico no encontrado"));
     }
 
-    public Medico actualizar(String id, MedicoDTO dto) {
+    public Medico actualizar(String id, MedicoDTO dto) { 
         log.info("Actualizar Medico", keyValue("id", id));
 
-        Medico m = obtener(id);
+        Medico m = obtener(id);  // ahora sí compila, ambos String
         m.setNombreMedico(dto.getNombreMedico());
         m.setEspecialidad(dto.getEspecialidad());
         m.setEdad(dto.getEdad());
