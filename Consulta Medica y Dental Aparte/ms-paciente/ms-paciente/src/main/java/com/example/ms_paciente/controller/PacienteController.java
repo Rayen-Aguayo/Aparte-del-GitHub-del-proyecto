@@ -58,7 +58,7 @@ public class PacienteController {
                 linkTo(methodOn(PacienteController.class).listar())
                         .withRel("all"));
 
-        // CORRECCIÓN: Sacamos el RUN directamente del objeto paciente creado usando getRun()
+        
         recurso.add(
                 linkTo(methodOn(PacienteController.class).obtener(paciente.getRun()))
                         .withSelfRel());
@@ -85,6 +85,16 @@ public class PacienteController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ApiResponse<List<Paciente>>> listar() {
         return ResponseEntity.ok(
+
+        
+        Paciente paciente = pacienteService.obtener(run);
+
+        EntityModel<Paciente> recurso = EntityModel.of(paciente);
+
+        recurso.add(
+                linkTo(methodOn(PacienteController.class).obtener(run))
+                        .withSelfRel());
+
                 ApiResponse.<List<Paciente>>builder()
                         .success(true)
                         .message("Listado obtenido")
@@ -112,10 +122,6 @@ public class PacienteController {
         Paciente paciente = pacienteService.obtener(run);
 
         EntityModel<Paciente> recurso = EntityModel.of(paciente);
-
-        recurso.add(
-                linkTo(methodOn(PacienteController.class).obtener(run))
-                        .withSelfRel());
 
         recurso.add(
                 linkTo(methodOn(PacienteController.class).listar())
@@ -158,17 +164,7 @@ public class PacienteController {
         @PathVariable String run,
         @Valid @RequestBody PacienteDTO dto) {
 
-        Paciente paciente = pacienteService.actualizar(run, dto);
 
-        EntityModel<Paciente> recurso = EntityModel.of(paciente);
-
-        recurso.add(
-        linkTo(methodOn(PacienteController.class).listar())
-                .withRel("all"));
-        
-        recurso.add(
-        linkTo(methodOn(PacienteController.class).obtener(run))
-                .withSelfRel());
 
         return ResponseEntity.ok(
                 ApiResponse.<Paciente>builder()
@@ -196,6 +192,17 @@ public class PacienteController {
         @PathVariable String run) {
 
         pacienteService.eliminar(run);
+
+        Paciente paciente = pacienteService.actualizar(run, null);
+        EntityModel<Paciente> recurso = EntityModel.of(paciente);
+
+        recurso.add(
+        linkTo(methodOn(PacienteController.class).listar())
+                .withRel("all"));
+        
+        recurso.add(
+        linkTo(methodOn(PacienteController.class).obtener(run))
+                .withSelfRel());
 
         return ResponseEntity.ok(
                 ApiResponse.<Void>builder()
