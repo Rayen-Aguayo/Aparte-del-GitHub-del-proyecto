@@ -28,6 +28,9 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import org.springframework.hateoas.EntityModel;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 @Tag(name = "Medicos", description = "Operaciones relacionadas con Medicos")
 @RestController
 @RequestMapping("api/v1/medicos")
@@ -97,6 +100,25 @@ public class MedicoController {
         @Parameter(description = "Identificador único del médico (RUN)", example = "12345678-9")
         @PathVariable String id,           
         @RequestHeader("Authorization") String token) {
+
+        Medico medico = medicoService.obtener(id);
+
+        EntityModel<Medico> recurso = EntityModel.of(medico);
+
+        recurso.add(
+                linkTo(methodOn(MedicoController.class).listar())
+                        .withRel("all"));
+
+        recurso.add(
+                linkTo(methodOn(MedicoController.class).actualizar(id, null))
+                        .withRel("update"));
+        recurso.add(
+                linkTo(methodOn(MedicoController.class).crear(null))
+                        .withRel("create"));
+        
+        recurso.add(
+                linkTo(methodOn(MedicoController.class).eliminar(id))
+                        .withRel("delete"));
 
         return ResponseEntity.ok(
                 ApiResponse.<Medico>builder()
