@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.ms_pagos.dto.ApiResponse;
 import com.example.ms_pagos.dto.PagosDTO;
 import com.example.ms_pagos.dto.PagosResponse;
+import com.example.ms_pagos.service.PagosService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
