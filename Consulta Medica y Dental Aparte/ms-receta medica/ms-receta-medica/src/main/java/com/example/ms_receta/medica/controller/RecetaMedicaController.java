@@ -1,4 +1,4 @@
-package com.example.Receta.Medica.controller;
+package com.example.ms_receta.medica.controller;
 
 import java.util.List;
 
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.Receta.Medica.dto.ApiResponse;
-import com.example.Receta.Medica.dto.RecetaMedicaDTO;
-import com.example.Receta.Medica.dto.RecetaMedicaResponce;
-import com.example.Receta.Medica.service.RecetamedicaService;
+import com.example.ms_receta.medica.dto.ApiResponse;
+import com.example.ms_receta.medica.dto.RecetaMedicaDTO;
+import com.example.ms_receta.medica.dto.RecetaMedicaResponce;
+import com.example.ms_receta.medica.service.RecetamedicaService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -1,10 +1,10 @@
-package com.example.Receta.Medica.client;
+package com.example.ms_receta.medica.client;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.example.Receta.Medica.dto.ApiResponse;
-import com.example.Receta.Medica.dto.MedicoResponse;
+import com.example.ms_receta.medica.dto.ApiResponse;
+import com.example.ms_receta.medica.dto.MedicoResponse;
 
 import lombok.RequiredArgsConstructor;
 

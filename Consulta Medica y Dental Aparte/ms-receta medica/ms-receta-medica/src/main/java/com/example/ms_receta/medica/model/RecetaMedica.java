@@ -1,4 +1,4 @@
-package com.example.Receta.Medica.model;
+package com.example.ms_receta.medica.model;
 
 import java.time.LocalDate;
 

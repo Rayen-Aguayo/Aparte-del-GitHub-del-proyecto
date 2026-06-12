@@ -1,4 +1,4 @@
-package com.example.Receta.Medica.dto;
+package com.example.ms_receta.medica.dto;
 
 import lombok.*;
 
