@@ -35,7 +35,7 @@ public class MedicoService {
         return medicoRepository.findAll();
     }
 
-    public Medico obtener(Long id) {              
+    public Medico obtener(String id) {              
         log.info("Obtener Medico", keyValue("run", id));
 
         return medicoRepository.findById(id)
