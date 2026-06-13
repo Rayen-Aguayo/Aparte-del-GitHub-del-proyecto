@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ms_registro.de.materiales.dto.ApiResponse;
+import com.example.ms_registro.de.materiales.dto.RegistroMaterialesDTO;
 import com.example.ms_registro.de.materiales.model.RegistroMateriales;
 import com.example.ms_registro.de.materiales.service.RegistroMaterialesService;
 
@@ -21,13 +22,31 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
+@Tag(name = "Registro de Materiales", description = "Operaciones relacionadas con el registro y gestión de materiales médicos")
 @RestController
 @RequestMapping("/api/v1/registrosMateriales")
 @RequiredArgsConstructor
 public class RegistroMaterialesController {
+
     private final RegistroMaterialesService pacienteService;
+    
+    @Operation(
+    summary = "Crear registro de materiales",
+    description = "Crea un nuevo registro de materiales. Requiere rol ADMIN."
+    )
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Registro creado correctamente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Datos de entrada inválidos")
+    })  
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -43,6 +62,15 @@ public class RegistroMaterialesController {
                         .build()
         );
     }
+        @Operation(
+            summary = "Listar registros de materiales",
+            description = "Retorna todos los registros de materiales del sistema. Requiere rol ADMIN."
+        )
+        @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Listado obtenido correctamente"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
+        })
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN')")
@@ -56,6 +84,15 @@ public class RegistroMaterialesController {
                         .build()
         );
     }
+    @Operation(
+        summary = "Obtener registro de materiales por ID",
+        description = "Busca un registro específico utilizando su identificador único."
+    )
+        @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Registro obtenido exitosamente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
+    })
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")

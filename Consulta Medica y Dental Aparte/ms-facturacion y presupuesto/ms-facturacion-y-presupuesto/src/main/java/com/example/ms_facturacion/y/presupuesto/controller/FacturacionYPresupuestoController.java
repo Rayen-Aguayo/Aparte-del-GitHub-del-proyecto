@@ -68,7 +68,9 @@ public class FacturacionYPresupuestoController {
         description = "Crea un nuevo cobro o presupuesto. Requiere rol ADMIN."
     )
     @ApiResponses(value = {
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Registro creado exitosamente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "facturación y presupuesto creados exitosamente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado"),
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Datos de entrada inválidos")
     })
 
@@ -91,6 +93,11 @@ public class FacturacionYPresupuestoController {
         summary = "Obtener facturación por ID",
         description = "Busca un cobro o presupuesto específico utilizando su identificador único."
     )
+        @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "facturación y presupuesto obtenida exitosamente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
+    })
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
@@ -137,7 +144,12 @@ public class FacturacionYPresupuestoController {
         summary = "Actualizar facturación por ID",
         description = "Modifica los datos de un registro de facturación existente. Requiere rol ADMIN."
     )
-    
+        @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "facturación y presupuestoa actualizados exitosamente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
+    })
+
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ApiResponse<FacturacionYPresupuestoResponse>> actualizar(
@@ -155,16 +167,22 @@ public class FacturacionYPresupuestoController {
     }
 
     @Operation(
-        summary = "Eliminar facturación por ID",
+        summary = "Eliminar facturación y presupuesto por ID",
         description = "Remueve permanentemente un registro del sistema. Requiere rol ADMIN."
     )
+        @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "facturación y presupuestoa eliminados exitosamente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
+    })
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ApiResponse<Void>> eliminar(@PathVariable Long id) {
 
         facturacionYPresupuestoService.eliminar(id);
 
-        return ResponseEntity.ok(
+        return ResponseEntity.status(200).body(
                 ApiResponse.<Void>builder()
                         .success(true)
                         .message("Registro de facturación eliminado")
