@@ -2,6 +2,7 @@ package com.example.ms_registro.de.materiales.controller;
 
 import java.util.List;
 
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.PutMapping;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,7 +37,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 @RequiredArgsConstructor
 public class RegistroMaterialesController {
 
-    private final RegistroMaterialesService pacienteService;
+    private final RegistroMaterialesService registroMaterialesService;
     
     @Operation(
     summary = "Crear registro de materiales",
@@ -52,7 +54,7 @@ public class RegistroMaterialesController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<RegistroMateriales>> crear(@Valid @RequestBody RegistroMaterialesDTO dto) {
 
-        RegistroMateriales registro = pacienteService.crear(dto);
+        RegistroMateriales registro = registroMaterialesService.crear(dto);
 
         return ResponseEntity.status(201).body(
                 ApiResponse.<RegistroMateriales>builder()
@@ -80,7 +82,7 @@ public class RegistroMaterialesController {
                 ApiResponse.<List<RegistroMateriales>>builder()
                         .success(true)
                         .message("Listado obtenido")
-                        .data(pacienteService.listar())
+                        .data(registroMaterialesService.listar())
                         .build()
         );
     }
@@ -96,13 +98,37 @@ public class RegistroMaterialesController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<ApiResponse<RegistroMateriales>> obtener(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<RegistroMateriales>> obtener(
+            @Parameter(description = "ID del registro de materiales", example = "1")
+            @PathVariable Long id,
+            @RequestHeader("Authorization") String token) {
+        
+        RegistroMateriales RegistroMateriales = registroMaterialesService.obtener(id); 
+
+
+        EntityModel<RegistroMateriales> recurso = EntityModel.of(RegistroMateriales);
+
+
+        recurso.add(
+                linkTo(methodOn(RegistroMaterialesController.class).listar())
+                        .withRel("all")
+        );
+
+        recurso.add(
+                linkTo(methodOn(RegistroMaterialesController.class).actualizar(id, null))
+                        .withRel("update")
+        );
+
+        recurso.add(
+                linkTo(methodOn(RegistroMaterialesController.class).eliminar(id))
+                        .withRel("delete")
+        );
 
         return ResponseEntity.ok(
                 ApiResponse.<RegistroMateriales>builder()
                         .success(true)
                         .message("registro obtenido")
-                        .data(pacienteService.obtener(id))
+                        .data(registroMaterialesService.obtener(id))
                         .build()
         );
     }
@@ -112,7 +138,7 @@ public class RegistroMaterialesController {
     public ResponseEntity<ApiResponse<RegistroMateriales>> actualizar(@PathVariable Long id,
                                                         @Valid @RequestBody RegistroMaterialesDTO dto) {
 
-        RegistroMateriales registro = pacienteService.actualizar(id, dto);
+        RegistroMateriales registro = registroMaterialesService.actualizar(id, dto);
 
         return ResponseEntity.ok(
                 ApiResponse.<RegistroMateriales>builder()
@@ -127,7 +153,7 @@ public class RegistroMaterialesController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Void>> eliminar(@PathVariable Long id) {
 
-        pacienteService.eliminar(id);
+        registroMaterialesService.eliminar(id);
 
         return ResponseEntity.ok(
                 ApiResponse.<Void>builder()
