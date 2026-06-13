@@ -91,7 +91,7 @@ public class MedicoController {
         description = "Retorna todos los autores registrados. Requiere rol USER o ADMIN."
     )
     @ApiResponses(value = {
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Listado obtenido"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "medico/a obtenido"),
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
     })
@@ -131,7 +131,7 @@ public class MedicoController {
 
     @Operation(
             summary = "Actualizar Medico por Run",
-            description = "Modifica los datos de un Medico existente. Requiere rol USER o ADMIN."
+            description = "Modifica los datos de un Medico existente. Requiere rol ADMIN."
     )
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Medico/a actualizada con éxito"),
@@ -160,11 +160,11 @@ public class MedicoController {
     }
 
     @Operation(
-            summary = "Eliminar (anular) Medico por Run",
-            description = "Elimina o deja sin efecto un/a Medico del sistema. Requiere rol USER o ADMIN."
+            summary = "Eliminar Medico por Run",
+            description = "Elimina o deja sin efecto un/a Medico del sistema. Requiere rol ADMIN."
     )
     @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Medico/a eliminada/anulada con éxito"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Medico/a eliminado con éxito"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Medico/a no encontrada")
