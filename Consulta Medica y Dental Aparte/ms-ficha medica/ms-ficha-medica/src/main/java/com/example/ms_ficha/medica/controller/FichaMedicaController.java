@@ -177,7 +177,7 @@ public class FichaMedicaController {
             @PathVariable Long id) {
         fichaMedicaService.eliminar(id);
         
-        return ResponseEntity.ok(
+        return ResponseEntity.status(200).body(
                 ApiResponse.<Void>builder()
                         .success(true)
                         .message("Se anuló la hora")

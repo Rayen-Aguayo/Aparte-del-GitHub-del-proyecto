@@ -172,7 +172,7 @@ public class PacienteController {
 
         pacienteService.eliminar(run);
 
-        return ResponseEntity.ok(
+        return ResponseEntity.status(200).body(
                 ApiResponse.<Void>builder()
                         .success(true)
                         .message("paciente eliminado")

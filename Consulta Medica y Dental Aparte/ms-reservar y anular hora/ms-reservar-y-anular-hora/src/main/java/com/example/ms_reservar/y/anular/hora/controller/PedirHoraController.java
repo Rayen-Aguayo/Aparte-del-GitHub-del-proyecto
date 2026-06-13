@@ -93,7 +93,7 @@ public class PedirHoraController {
 
         pedirHoraService.eliminar(id);
 
-        return ResponseEntity.ok(
+        return ResponseEntity.status(200).body(
                 ApiResponse.<Void>builder()
                         .success(true)
                         .message("Se anulo la hora")

@@ -92,7 +92,7 @@ public class RecetaMedicaController {
 
         recetamedicaService.eliminar(id);
 
-        return ResponseEntity.ok(
+        return ResponseEntity.status(200).body(
                 ApiResponse.<Void>builder()
                         .success(true)
                         .message("Receta médica eliminada")

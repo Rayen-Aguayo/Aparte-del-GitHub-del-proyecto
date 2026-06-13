@@ -176,7 +176,7 @@ public class RegistroMaterialesController {
 
         registroMaterialesService.eliminar(id);
 
-        return ResponseEntity.ok(
+        return ResponseEntity.status(200).body(
                 ApiResponse.<Void>builder()
                         .success(true)
                         .message("registro eliminado")

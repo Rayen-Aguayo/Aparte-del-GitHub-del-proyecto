@@ -85,7 +85,7 @@ public class RegistroAtencionesController {
 
         service.eliminar(id);
 
-        return ResponseEntity.ok(
+        return ResponseEntity.status(200).body(
                 ApiResponse.<Void>builder()
                         .success(true)
                         .message("Registro de atenciones eliminado")

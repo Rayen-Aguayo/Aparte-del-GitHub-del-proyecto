@@ -178,7 +178,7 @@ public class MedicoController {
 
         medicoService.eliminar(id);
 
-        return ResponseEntity.ok(
+        return ResponseEntity.status(200).body(
                 ApiResponse.<Void>builder()
                         .success(true)
                         .message("Medico eliminado")
