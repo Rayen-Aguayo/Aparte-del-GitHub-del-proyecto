@@ -133,6 +133,17 @@ public class RegistroMaterialesController {
         );
     }
 
+    @Operation(
+        summary = "Actualizar el registro de materiales por su ID",
+        description = "Actualiza la información de un registro de materiales existente. Requiere rol ADMIN."
+    )
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Registro actualizado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Registro no encontrado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
+    })
+
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<RegistroMateriales>> actualizar(@PathVariable Long id,
@@ -148,6 +159,16 @@ public class RegistroMaterialesController {
                         .build()
         );
     }
+    @Operation(
+    summary = "Eliminar registro de materiales por su ID",
+    description = "Busca un registro de materiales usando su identificador (ID) y lo elimina. Requiere rol ADMIN."
+    )
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Registro eliminado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Registro no encontrado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
+    })
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
