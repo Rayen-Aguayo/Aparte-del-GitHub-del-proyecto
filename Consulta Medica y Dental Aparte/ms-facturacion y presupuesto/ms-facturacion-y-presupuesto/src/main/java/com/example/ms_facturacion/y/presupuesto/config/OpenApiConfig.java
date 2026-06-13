@@ -17,7 +17,7 @@ public class OpenApiConfig {
 
         return new OpenAPI()
                 .info(new Info()
-                        .title("MS Autor API")
+                        .title("MS Facturacion y Presupuesto API")
                         .version("1.0")
                         .description("Documentación del microservicio de autores"))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))

@@ -17,9 +17,9 @@ public class OpenApiConfig {
 
         return new OpenAPI()
                 .info(new Info()
-                        .title("MS Libro API")
+                        .title("MS Opinion del Paciente API")
                         .version("1.0")
-                        .description("Documentación del microservicio de libros"))
+                        .description("Documentación del microservicio de libros "))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(new Components()
                         .addSecuritySchemes(securitySchemeName,
