@@ -160,11 +160,11 @@ public class FichaMedicaController {
     }
 
     @Operation(
-            summary = "Eliminar (anular) ficha médica por ID",
+            summary = "Eliminar ficha médica por ID",
             description = "Elimina o deja sin efecto una ficha médica del sistema. Requiere rol USER o ADMIN."
     )
     @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Ficha médica eliminada/anulada con éxito"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Ficha médica eliminada con éxito"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Ficha médica no encontrada")

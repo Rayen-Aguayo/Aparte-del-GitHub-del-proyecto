@@ -164,11 +164,11 @@ public class PedirHoraController {
     }
 
    @Operation(
-        summary = "Eliminar una hora medica por ID",
+        summary = "Eliminar (anular) una hora medica por ID",
         description = "Elimina una hora medica que haya pedido un paciente. Requiere rol USER o ADMIN."
     )
         @ApiResponses(value = {
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Hora medica eliminados exitosamente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Hora medica eliminada/anulada exitosamente"),
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
     })
