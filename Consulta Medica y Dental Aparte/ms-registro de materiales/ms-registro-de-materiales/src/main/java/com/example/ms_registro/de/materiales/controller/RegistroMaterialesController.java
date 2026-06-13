@@ -88,7 +88,7 @@ public class RegistroMaterialesController {
     }
     @Operation(
         summary = "Obtener registro de materiales por ID",
-        description = "Busca un registro específico utilizando su identificador único."
+        description = "Busca un registro específico utilizando su identificador único. Requiere rol ADMIN."
     )
         @ApiResponses(value = {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Registro obtenido exitosamente"),

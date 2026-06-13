@@ -134,7 +134,7 @@ public class OpinionPacienteController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Void>> eliminar(@PathVariable Long id) {
         opinionPacienteService.eliminar(id);
-        return ResponseEntity.ok(
+        return ResponseEntity.status(200).body(
             ApiResponse.<Void>builder()
                 .success(true)
                 .message("La opinión ha sido eliminada")
