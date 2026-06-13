@@ -3,7 +3,7 @@ package com.example.ms_receta.medica.exception;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.Receta.Medica.dto.ApiResponse;
+import com.example.ms_receta.medica.dto.ApiResponse;
 
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import java.util.*;
