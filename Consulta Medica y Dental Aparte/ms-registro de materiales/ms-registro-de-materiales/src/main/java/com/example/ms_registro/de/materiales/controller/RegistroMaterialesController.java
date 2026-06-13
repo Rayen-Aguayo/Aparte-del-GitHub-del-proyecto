@@ -65,7 +65,7 @@ public class RegistroMaterialesController {
         );
     }
         @Operation(
-            summary = "Listar registros de materiales",
+            summary = "Listar Registros de Materiales",
             description = "Retorna todos los registros de materiales del sistema. Requiere rol ADMIN."
         )
         @ApiResponses(value = {

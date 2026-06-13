@@ -33,7 +33,6 @@ public class JwtFilter extends OncePerRequestFilter {
             || path.equals("/swagger-ui.html");
     }
 
-
     @Override
     protected void doFilterInternal(HttpServletRequest req,
                                     HttpServletResponse res,
