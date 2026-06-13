@@ -2,6 +2,7 @@ package com.example.ms_reservar.y.anular.hora.controller;
 
 import java.util.List;
 
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,12 +23,31 @@ import com.example.ms_reservar.y.anular.hora.service.PedirHoraService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
+@Tag(name = "Pedir hora", description = "Operaciones relacionadas con la gestión de reservas y anulaciones de horas médicas")
 @RestController
 @RequestMapping("/api/v1/reservar-y-anular-hora")
 @RequiredArgsConstructor
 
 public class PedirHoraController { 
     private final PedirHoraService pedirHoraService;
+
+    @Operation(
+        summary = "Pedir hora",
+        description = "Crea una nueva reserva de hora médica. Requiere rol USER o ADMIN."
+    )
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Reserva de hora creada exitosamente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Datos de entrada inválidos")
+    })
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN')")
@@ -44,6 +64,16 @@ public class PedirHoraController {
         );
     }
 
+    @Operation(
+        summary = "Listar reservas de hora",
+        description = "Retorna todas las reservas de hora del sistema. Requiere rol USER o ADMIN."
+    )
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Listado obtenido correctamente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
+    })
+
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ApiResponse<List<PedirHoraResponse>>> listar(
@@ -57,11 +87,47 @@ public class PedirHoraController {
         );
     }
 
+    @Operation(
+        summary = "Obtener hora medica por ID",
+        description = "Buscar una hora de un paciente que haya tomado utilizando su identificador único. Requiere rol USER o ADMIN."
+    )
+        @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Hora medica obtenida exitosamente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
+    })
+
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<ApiResponse<PedirHoraResponse>> obtener(
+            @Parameter(description = "ID de la hora medica", example = "1")
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
+        
+        PedirHoraResponse PedirHora = pedirHoraService.obtener(id, token);
+
+        EntityModel<PedirHoraResponse> recurso = EntityModel.of(PedirHora);
+
+
+        recurso.add(
+                linkTo(methodOn(PedirHoraController.class).obtener(id, token))
+                        .withSelfRel()
+        );
+
+        recurso.add(
+                linkTo(methodOn(PedirHoraController.class).listar(token))
+                        .withRel("all")
+        );
+
+        recurso.add(
+                linkTo(methodOn(PedirHoraController.class).actualizar(id, null, token))
+                        .withRel("update")
+        );
+
+        recurso.add(
+                linkTo(methodOn(PedirHoraController.class).eliminar(id))
+                        .withRel("delete")
+        );
 
         return ResponseEntity.ok(
                 ApiResponse.<PedirHoraResponse>builder()
@@ -70,6 +136,16 @@ public class PedirHoraController {
                         .build()
         );
     }
+
+    @Operation(
+        summary = "Actualizar hora medica por ID",
+        description = "Modifica una hora medica que haya tomado un paciente. Requiere rol USER o ADMIN."
+    )
+        @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Hora medica actualizados exitosamente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
+    })
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
@@ -86,6 +162,16 @@ public class PedirHoraController {
                         .build()
         );
     }
+
+   @Operation(
+        summary = "Eliminar una hora medica por ID",
+        description = "Elimina una hora medica que haya pedido un paciente. Requiere rol USER o ADMIN."
+    )
+        @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Hora medica eliminados exitosamente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
+    })
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")

@@ -171,7 +171,7 @@ public class FacturacionYPresupuestoController {
         description = "Remueve permanentemente un registro del sistema. Requiere rol ADMIN."
     )
         @ApiResponses(value = {
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "facturación y presupuestoa eliminados exitosamente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Facturación y presupuestoa eliminados exitosamente"),
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
     })
