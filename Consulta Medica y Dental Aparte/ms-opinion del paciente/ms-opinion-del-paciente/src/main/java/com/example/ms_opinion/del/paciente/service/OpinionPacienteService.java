@@ -77,7 +77,7 @@ public class OpinionPacienteService {
         opinionPacienteRepository.deleteById(id);
     }
 
-    // Método para convertir el Modelo a Response
+    
     private OpinionPacienteResponse mapToResponse(OpinionPaciente opinion, String token) {
         var paciente = pacienteClient.getPacienteClient(opinion.getRunPaciente(), token);
         var medico = medicoClient.getMedicoClient(opinion.getRunMedico(), token);
@@ -89,6 +89,7 @@ public class OpinionPacienteService {
                 .expliqueSuPuntuacion(opinion.getExpliqueSuPuntuacion())
                 .explicacionTratamiento(opinion.getExplicacionTratamiento())
                 .comentarioMejora(opinion.getComentarioMejora())
+                .puntuacionMedico(opinion.getPuntuacionMedico())
                 .build();
     }
 }

@@ -2,6 +2,7 @@ package com.example.ms_opinion.del.paciente.controller;
 
 import java.util.List;
 
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -51,7 +52,15 @@ public class OpinionPacienteController {
                 .build()
         );
     }
-    
+    @Operation(
+    summary = "Listar las opiniones de los pacientes",
+    description = "Retorna todas las opiniones de los pacientes. Requiere rol USER o ADMIN."
+    )
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Listado obtenido correctamente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
+    })
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<List<OpinionPacienteResponse>>> listar(@RequestHeader("Authorization") String token) {
@@ -63,9 +72,45 @@ public class OpinionPacienteController {
                 .build()
         );
     }
+        @Operation(
+        summary = "Obtener opinión por ID",
+        description = "Busca una opinión específica utilizando su identificador único. Requiere rol USER o ADMIN."
+    )
+        @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Opinión obtenida exitosamente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
+    })
+    
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<ApiResponse<OpinionPacienteResponse>> obtener(@PathVariable Long id, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<ApiResponse<OpinionPacienteResponse>> obtener(
+        
+            @Parameter(description = "ID de la opinión del paciente", example = "1")
+            @PathVariable Long id,
+            @RequestHeader("Authorization") String token) {
+        
+        OpinionPacienteResponse opinion = opinionPacienteService.obtener(id, token);
+
+        EntityModel<OpinionPacienteResponse> recurso = EntityModel.of(opinion);
+
+
+           recurso.add(
+            linkTo(methodOn(OpinionPacienteController.class).obtener(id, token))
+                    .withSelfRel()
+        );
+
+        recurso.add(
+                linkTo(methodOn(OpinionPacienteController.class).listar(token))
+                        .withRel("all")
+        );
+
+        recurso.add(
+                linkTo(methodOn(OpinionPacienteController.class).eliminar(id))
+                        .withRel("delete")
+        );
+
+
         return ResponseEntity.ok(
             ApiResponse.<OpinionPacienteResponse>builder()
                 .success(true)
@@ -74,6 +119,17 @@ public class OpinionPacienteController {
                 .build()
         );
     }
+
+    @Operation(
+        summary = "Eliminar opinión por ID",
+        description = "elimina una opinión específica utilizando su identificador único. Requiere rol ADMIN."
+    )
+        @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Opinión eliminada exitosamente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token inválido"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
+    })
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Void>> eliminar(@PathVariable Long id) {

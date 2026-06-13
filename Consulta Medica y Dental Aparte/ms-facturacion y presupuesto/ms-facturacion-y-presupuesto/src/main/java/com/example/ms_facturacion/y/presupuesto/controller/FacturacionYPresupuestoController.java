@@ -91,7 +91,7 @@ public class FacturacionYPresupuestoController {
 
     @Operation(
         summary = "Obtener facturación por ID",
-        description = "Busca un cobro o presupuesto específico utilizando su identificador único."
+        description = "Busca un cobro o presupuesto específico utilizando su identificador único. Requiere rol USER o ADMIN."
     )
         @ApiResponses(value = {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "facturación y presupuesto obtenida exitosamente"),
