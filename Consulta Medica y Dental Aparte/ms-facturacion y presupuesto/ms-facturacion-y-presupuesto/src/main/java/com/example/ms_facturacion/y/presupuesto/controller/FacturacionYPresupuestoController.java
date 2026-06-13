@@ -111,9 +111,9 @@ public class FacturacionYPresupuestoController {
         EntityModel<FacturacionYPresupuestoResponse> recurso = EntityModel.of(FacturacionYPresupuesto);
 
 
-           recurso.add(
-            linkTo(methodOn(FacturacionYPresupuestoController.class).obtener(id, token))
-                    .withSelfRel()
+        recurso.add(
+                linkTo(methodOn(FacturacionYPresupuestoController.class).obtener(id, token))
+                        .withSelfRel()
         );
 
         recurso.add(
