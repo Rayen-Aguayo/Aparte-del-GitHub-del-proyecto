@@ -5,7 +5,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.*;
 
-
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -17,13 +16,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.HttpServletResponse;
 
-
 @Configuration
 @RequiredArgsConstructor
 @EnableMethodSecurity
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
+    private final ObjectMapper objectMapper; // ✅ Fix #1: inyectado como bean, no instanciado por request
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -32,6 +31,8 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
+                    // ✅ Fix #3: rutas públicas sin autenticación
+                    .requestMatchers("/auth/**", "/actuator/health", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
                     .anyRequest().authenticated()
             )
             .exceptionHandling(ex -> ex
@@ -49,13 +50,14 @@ public class SecurityConfig {
 
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8"); // ✅ Fix #2: encoding explícito para caracteres españoles
 
             ApiResponse<Object> res = ApiResponse.builder()
                     .success(false)
                     .message("Acceso denegado")
                     .build();
 
-            new ObjectMapper().writeValue(response.getOutputStream(), res);
+            objectMapper.writeValue(response.getOutputStream(), res); // ✅ Fix #1: usar bean inyectado
         };
     }
 
@@ -65,13 +67,14 @@ public class SecurityConfig {
 
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8"); // ✅ Fix #2: encoding explícito para caracteres españoles
 
             ApiResponse<Object> res = ApiResponse.builder()
                     .success(false)
                     .message("No autenticado o token inválido")
                     .build();
 
-            new ObjectMapper().writeValue(response.getOutputStream(), res);
+            objectMapper.writeValue(response.getOutputStream(), res); // ✅ Fix #1: usar bean inyectado
         };
     }
 }
