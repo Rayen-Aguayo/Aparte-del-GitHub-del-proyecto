@@ -31,7 +31,8 @@ public class FacturacionYPresupuestoServiceTest {
     void deberiaRetornarFacturacionYPresupuestoExiste() {
     // Arrange
     FacturacionYPresupuesto facYpre = new FacturacionYPresupuesto(
-        1L, 30.000, "paciente","1-1", "medico","1-2","tratamiento",
+        1L, 30.000, "paciente","1-1",
+         "medico","1-2","tratamiento",
     8, "gestionPagos");
     when(repo.findById(1L)).thenReturn(Optional.of(facYpre));
     
@@ -75,4 +76,40 @@ void deberiaLanzarExcepcionCuandoFacturacionYPresupuestoNoExiste() {
     assertEquals("Facturacion y presupuesto encontrado", ex.getMessage());
     verify(repo).findById(99L);
 }
+
+@Test
+void deberiaRetornarListaAutores() {
+    // Arrange
+    FacturacionYPresupuesto facYpre = new FacturacionYPresupuesto( 1L, 30.000, "paciente","1-1",
+     "medico","1-2","tratamiento",
+    8, "gestionPagos");
+
+    when(repo.findAll()).thenReturn(List.of(facYpre));
+
+    // Act
+    List<FacturacionYPresupuestoResponse> resultado = service.listar(null);
+
+    // Assert
+    assertFalse(resultado.isEmpty());
+    assertEquals(1, resultado.size());
+
+    FacturacionYPresupuestoResponse item = resultado.get(0);
+
+    assertEquals(30.000, item.getPresupuesto());
+
+    assertNotNull(item.getPaciente());
+    assertEquals("paciente", item.getPaciente().getNombrePaciente());
+    assertEquals("1-1", item.getPaciente().getRunPaciente());
+
+    assertNotNull(item.getMedico());
+    assertEquals("medico", item.getMedico().getNombreMedico());
+    assertEquals("1-2", item.getMedico().getRunMedico());
+
+    assertEquals("tratamiento", item.getTratamiento());
+    assertEquals(8, item.getDiasDuracion());
+    assertEquals("gestionPagos", item.getGestionPagos());
+
+    verify(repo).findAll();
+}
+
 }
