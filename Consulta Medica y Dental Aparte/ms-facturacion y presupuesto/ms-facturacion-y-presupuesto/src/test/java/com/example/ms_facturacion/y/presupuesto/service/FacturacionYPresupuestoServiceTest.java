@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.example.ms_facturacion.y.presupuesto.dto.FacturacionYPresupuestoDTO;
 import com.example.ms_facturacion.y.presupuesto.dto.FacturacionYPresupuestoResponse;
 import com.example.ms_facturacion.y.presupuesto.model.FacturacionYPresupuesto;
 import com.example.ms_facturacion.y.presupuesto.repository.FacturacionYPresupuestoRepository;
@@ -111,5 +112,105 @@ void deberiaRetornarListaAutores() {
 
     verify(repo).findAll();
 }
+@Test
+void deberiaCrearFacturacionYPresupuestoCorrectamente() {
+    
+    // Arrange
+    FacturacionYPresupuestoDTO dto = new FacturacionYPresupuestoDTO();
+                    
+                    dto.setPresupuesto(30.000);
+                    dto.setNombrePaciente("paciente");    
+                    dto.setRunPaciente("1-1");
+                    dto.setNombreMedico("medico");
+                    dto.setRunMedico("1-2");
+                    dto.setTratamiento("tratamiento");
+                    dto.setDiasDuracion(8);
+                    dto.setGestionPagos("gestionPagos");
 
+    String tokenDePrueba = "Bearer token-prueba";
+
+    FacturacionYPresupuesto Guardado = new FacturacionYPresupuesto(1L, 30.000, "paciente","1-1",
+     "medico","1-2","tratamiento",
+    8, "gestionPagos");
+    when(repo.save(any(FacturacionYPresupuesto.class))).thenReturn(Guardado);
+
+    // Act
+    FacturacionYPresupuestoResponse resultado = service.crear(dto,tokenDePrueba);
+
+    // Assert
+    assertNotNull(resultado);
+    assertEquals(1L, resultado.getId());
+    assertEquals(30.000, resultado.getPresupuesto());
+
+    assertNotNull(resultado.getPaciente());
+    assertEquals("paciente", resultado.getPaciente().getNombrePaciente());
+    assertEquals("1-1", resultado.getPaciente().getRunPaciente());
+
+    assertNotNull(resultado.getMedico());
+    assertEquals("medico", resultado.getMedico().getNombreMedico());
+    assertEquals("1-2", resultado.getMedico().getRunMedico());
+
+    assertEquals("tratamiento", resultado.getTratamiento());
+    assertEquals(8, resultado.getDiasDuracion());
+    assertEquals("gestionPagos", resultado.getGestionPagos());
+
+    verify(repo).save(any(FacturacionYPresupuesto.class));
+}
+
+@Test
+void deberiaActualizarFacturacionYPresupuestoCorrectamente() {
+    // Arrange
+    FacturacionYPresupuesto existente = new FacturacionYPresupuesto(1L, 30.000, "paciente","1-1",
+     "medico","1-2","tratamiento",
+    8, "gestionPagos");
+
+    FacturacionYPresupuestoDTO dto = new FacturacionYPresupuestoDTO();
+                    dto.setPresupuesto(30.000);
+                    dto.setNombrePaciente("paciente");    
+                    dto.setRunPaciente("1-1");
+                    dto.setNombreMedico("medico");
+                    dto.setRunMedico("1-2");
+                    dto.setTratamiento("tratamiento");
+                    dto.setDiasDuracion(8);
+                    dto.setGestionPagos("gestionPagos");
+
+            String tokenDePrueba = "Bearer token-prueba";
+
+    when(repo.findById(1L)).thenReturn(Optional.of(existente));
+    when(repo.save(any(FacturacionYPresupuesto.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+    // Act
+    FacturacionYPresupuestoResponse resultado = service.actualizar(1L, dto, tokenDePrueba);
+
+    // Assert
+    assertNotNull(resultado);
+    assertEquals(1L, resultado.getId());
+    assertEquals(30.000, resultado.getPresupuesto());
+
+    assertNotNull(resultado.getPaciente());
+    assertEquals("paciente", resultado.getPaciente().getNombrePaciente());
+    assertEquals("1-1", resultado.getPaciente().getRunPaciente());
+
+    assertNotNull(resultado.getMedico());
+    assertEquals("medico", resultado.getMedico().getNombreMedico());
+    assertEquals("1-2", resultado.getMedico().getRunMedico());
+
+    assertEquals("tratamiento", resultado.getTratamiento());
+    assertEquals(8, resultado.getDiasDuracion());
+    assertEquals("gestionPagos", resultado.getGestionPagos());
+
+    verify(repo).findById(1L);
+    verify(repo).save(existente);
+}
+@Test
+void deberiaEliminarFacturacionYPresupuestoPorId() {
+    // Arrange
+    doNothing().when(repo).deleteById(1L);
+
+    // Act
+    service.eliminar(1L);
+
+    // Assert
+    verify(repo).deleteById(1L);
+}
 }
