@@ -17,7 +17,7 @@ public class OpenApiConfig {
 
         return new OpenAPI()
                 .info(new Info()
-                        .title("MS Libro API")
+                        .title("MS Ficha Medica API")
                         .version("1.0")
                         .description("Documentación del microservicio de libros"))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
