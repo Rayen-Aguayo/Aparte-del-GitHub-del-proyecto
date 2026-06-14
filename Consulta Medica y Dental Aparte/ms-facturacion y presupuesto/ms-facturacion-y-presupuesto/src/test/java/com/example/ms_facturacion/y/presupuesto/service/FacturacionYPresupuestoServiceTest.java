@@ -203,6 +203,23 @@ void deberiaActualizarFacturacionYPresupuestoCorrectamente() {
     verify(repo).save(existente);
 }
 @Test
+void deberiaLanzarExcepcionCuandoFacturacionYPresupuestoNoEeActualizoorrectamente() {
+    // Arrange
+    when(repo.findById(99L)).thenReturn(Optional.empty());
+
+    // Act + Assert
+    String tokenDePrueba = "Bearer token-prueba";
+
+    EntityNotFoundException ex = assertThrows(
+            EntityNotFoundException.class,
+            () -> service.obtener(99L, tokenDePrueba)
+    );
+
+    assertEquals("Facturacion y presupuesto encontrado", ex.getMessage());
+    verify(repo).findById(99L);
+}
+
+@Test
 void deberiaEliminarFacturacionYPresupuestoPorId() {
     // Arrange
     doNothing().when(repo).deleteById(1L);
