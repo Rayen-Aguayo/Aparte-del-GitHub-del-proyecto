@@ -198,8 +198,19 @@ void deberiaActualizarFacturacionYPresupuestoCorrectamente() {
     assertEquals("tratamiento", resultado.getTratamiento());
     assertEquals(8, resultado.getDiasDuracion());
     assertEquals("gestionPagos", resultado.getGestionPagos());
-    
+
     verify(repo).findById(1L);
     verify(repo).save(existente);
+}
+@Test
+void deberiaEliminarFacturacionYPresupuestoPorId() {
+    // Arrange
+    doNothing().when(repo).deleteById(1L);
+
+    // Act
+    service.eliminar(1L);
+
+    // Assert
+    verify(repo).deleteById(1L);
 }
 }
