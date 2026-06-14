@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.example.ms_facturacion.y.presupuesto.dto.FacturacionYPresupuestoDTO;
 import com.example.ms_facturacion.y.presupuesto.dto.FacturacionYPresupuestoResponse;
 import com.example.ms_facturacion.y.presupuesto.model.FacturacionYPresupuesto;
 import com.example.ms_facturacion.y.presupuesto.repository.FacturacionYPresupuestoRepository;
@@ -110,6 +111,50 @@ void deberiaRetornarListaAutores() {
     assertEquals("gestionPagos", item.getGestionPagos());
 
     verify(repo).findAll();
+}
+@Test
+void deberiaCrearAutorCorrectamente() {
+    
+    // Arrange
+    FacturacionYPresupuestoDTO dto = new FacturacionYPresupuestoDTO();
+                    
+                    dto.setPresupuesto(30.000);
+                    dto.setNombrePaciente("paciente");    
+                    dto.setRunPaciente("1-1");
+                    dto.setNombreMedico("medico");
+                    dto.setRunMedico("1-2");
+                    dto.setTratamiento("tratamiento");
+                    dto.setDiasDuracion(8);
+                    dto.setGestionPagos("gestionPagos");
+
+    String tokenDePrueba = "Bearer token-prueba";
+
+    FacturacionYPresupuesto Guardado = new FacturacionYPresupuesto(1L, 30.000, "paciente","1-1",
+     "medico","1-2","tratamiento",
+    8, "gestionPagos");
+    when(repo.save(any(FacturacionYPresupuesto.class))).thenReturn(Guardado);
+
+    // Act
+    FacturacionYPresupuestoResponse resultado = service.crear(dto,tokenDePrueba);
+
+    // Assert
+    assertNotNull(resultado);
+    assertEquals(1L, resultado.getId());
+    assertEquals(30.000, resultado.getPresupuesto());
+
+    assertNotNull(resultado.getPaciente());
+    assertEquals("paciente", resultado.getPaciente().getNombrePaciente());
+    assertEquals("1-1", resultado.getPaciente().getRunPaciente());
+
+    assertNotNull(resultado.getMedico());
+    assertEquals("medico", resultado.getMedico().getNombreMedico());
+    assertEquals("1-2", resultado.getMedico().getRunMedico());
+
+    assertEquals("tratamiento", resultado.getTratamiento());
+    assertEquals(8, resultado.getDiasDuracion());
+    assertEquals("gestionPagos", resultado.getGestionPagos());
+
+    verify(repo).save(any(FacturacionYPresupuesto.class));
 }
 
 }
