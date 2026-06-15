@@ -35,14 +35,14 @@ public class FichaMedicaService {
                 token);
 
         if (paciente == null) {
-            throw new RuntimeException("El paciente no existe");
+            throw new RuntimeException("El paciente no existe no se puede crear la Ficha medica");
         }
         var medico = medicoClient.getMedicoClient(
                 dto.getRunMedico(),
                 token);
 
         if (medico == null) {
-            throw new RuntimeException("El médico no existe");
+            throw new RuntimeException("El médico no existe no se puede crear la Ficha medica");
         }
 
         FichaMedica fichaMedica = fichaMedicaRepository.save(
