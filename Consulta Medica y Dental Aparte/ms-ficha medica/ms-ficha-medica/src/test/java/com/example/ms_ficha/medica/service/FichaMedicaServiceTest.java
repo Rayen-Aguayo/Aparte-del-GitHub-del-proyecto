@@ -45,14 +45,20 @@ public class FichaMedicaServiceTest {
     String tokenDePrueba = "Bearer token-prueba";
 
     FichaMedica fichaMedica = new FichaMedica(
-        1L, 30.000, "paciente","1-1",
-         "medico","1-2","tratamiento",
-    8, "gestionPagos");
+        1L, "paciente","1-1",
+         "medico","1-2","procedimiento",
+    "queMedicamentoEstaTomando", "enfermedad",
+    "alergias","odontograma");
+
     when(repo.findById(1L)).thenReturn(Optional.of(fichaMedica));
 
     PacienteResponse pacienteResponse = new PacienteResponse();
     pacienteResponse.setRunPaciente("1-1");
     pacienteResponse.setNombrePaciente("paciente");
+    pacienteResponse.setAlergias("alergias");
+    pacienteResponse.setEnfermedad("enfermedad");
+    pacienteResponse.setQueMedicamentoEstaTomando("queMedicamentoEstaTomando");
+    
     
     when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(pacienteResponse);
 
@@ -68,24 +74,26 @@ public class FichaMedicaServiceTest {
     // Assert
     assertNotNull(resultado);
     assertEquals(1L, resultado.getId());
-    assertEquals(30.000, resultado.getPresupuesto());
 
     assertNotNull(resultado.getPaciente());
-    assertEquals("paciente", resultado.getPaciente().getNombrePaciente());
     assertEquals("1-1", resultado.getPaciente().getRunPaciente());
+    assertEquals("paciente", resultado.getPaciente().getNombrePaciente());
+    assertEquals("alergias", resultado.getPaciente().getAlergias());
+    assertEquals("enfermedad", resultado.getPaciente().getEnfermedad());
+    assertEquals("queMedicamentoEstaTomando", resultado.getQueMedicamentoEstaTomando());
+
 
     assertNotNull(resultado.getMedico());
     assertEquals("medico", resultado.getMedico().getNombreMedico());
     assertEquals("1-2", resultado.getMedico().getRunMedico());
 
-    assertEquals("tratamiento", resultado.getTratamiento());
-    assertEquals(8, resultado.getDiasDuracion());
-    assertEquals("gestionPagos", resultado.getGestionPagos());
+    assertEquals("procedimiento", resultado.getProcedimiento());
+    assertEquals("odontograma", resultado.getOdontograma());
 
     verify(repo).findById(1L);
 }
 @Test
-void deberiaLanzarExcepcionCuandoFacturacionYPresupuestoNoExiste() {
+void deberiaLanzarExcepcionCuandoFichaMedicaNoExiste() {
     // Arrange
     when(repo.findById(99L)).thenReturn(Optional.empty());
 
@@ -97,7 +105,7 @@ void deberiaLanzarExcepcionCuandoFacturacionYPresupuestoNoExiste() {
             () -> service.obtener(99L, tokenDePrueba)
     );
 
-    assertEquals("Facturacion y presupuesto encontrado", ex.getMessage());
+    assertEquals("Ficha medica no encontrado", ex.getMessage());
     verify(repo).findById(99L);
 }
 
@@ -106,15 +114,20 @@ void deberiaRetornarListaFichaMedica() {
     // Arrange
     String tokenDePrueba = "Bearer token-prueba";
 
-    FichaMedica fichaMedica = new FichaMedica( 1L, 30.000, "paciente","1-1",
-     "medico","1-2","tratamiento",
-    8, "gestionPagos");
+    FichaMedica fichaMedica = new FichaMedica( 
+        1L, "paciente","1-1",
+         "medico","1-2","procedimiento",
+    "queMedicamentoEstaTomando", "enfermedad",
+    "alergias","odontograma");
 
     when(repo.findAll()).thenReturn(List.of(fichaMedica));
 
     PacienteResponse pacienteResponse = new PacienteResponse();
     pacienteResponse.setRunPaciente("1-1");
     pacienteResponse.setNombrePaciente("paciente");
+    pacienteResponse.setAlergias("alergias");
+    pacienteResponse.setEnfermedad("enfermedad");
+    pacienteResponse.setQueMedicamentoEstaTomando("queMedicamentoEstaTomando");
     
     when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(pacienteResponse);
 
@@ -133,19 +146,19 @@ void deberiaRetornarListaFichaMedica() {
 
     FichaMedicaResponse item = resultado.get(0);
 
-    assertEquals(30.000, item.getPresupuesto());
-
     assertNotNull(item.getPaciente());
+    assertEquals("1-1", item.getPaciente().getRunPaciente());   
     assertEquals("paciente", item.getPaciente().getNombrePaciente());
-    assertEquals("1-1", item.getPaciente().getRunPaciente());
+    assertEquals("alergias", item.getPaciente().getAlergias());
+    assertEquals("enfermedad", item.getPaciente().getEnfermedad());
+    assertEquals("QueMedicamentoEstaTomando", item.getPaciente().getQueMedicamentoEstaTomando());
 
     assertNotNull(item.getMedico());
     assertEquals("medico", item.getMedico().getNombreMedico());
     assertEquals("1-2", item.getMedico().getRunMedico());
 
-    assertEquals("tratamiento", item.getTratamiento());
-    assertEquals(8, item.getDiasDuracion());
-    assertEquals("gestionPagos", item.getGestionPagos());
+    assertEquals("procedimiento", item.getProcedimiento());
+    assertEquals("odontograma", item.getOdontograma());
 
     verify(repo).findAll();
 }
@@ -157,19 +170,24 @@ void deberiaCrearFichaMedicaCorrectamente() {
 
     FichaMedicaDTO dto = new FichaMedicaDTO();
                     
-                    dto.setPresupuesto(30.000);
-                    dto.setNombrePaciente("paciente");    
                     dto.setRunPaciente("1-1");
-                    dto.setNombreMedico("medico");
+                    dto.setNombrePaciente("paciente");
                     dto.setRunMedico("1-2");
-                    dto.setTratamiento("tratamiento");
-                    dto.setDiasDuracion(8);
-                    dto.setGestionPagos("gestionPagos");
+                    dto.setNombreMedico("medico");
+                    dto.setProcedimiento("Procedimiento");
+                    dto.setQueMedicamentoEstaTomando("QueMedicamentoEstaTomando");
+                    dto.setEnfermedad("Enfermedad");
+                    dto.setAlergias("Alergias");
+                    dto.setOdontograma("Odontograma");
 
 
     PacienteResponse pacienteResponse = new PacienteResponse();
     pacienteResponse.setRunPaciente("1-1");
     pacienteResponse.setNombrePaciente("paciente");
+    pacienteResponse.setAlergias("alergias");
+    pacienteResponse.setEnfermedad("enfermedad");
+    pacienteResponse.setQueMedicamentoEstaTomando("queMedicamentoEstaTomando");
+    
     
     when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(pacienteResponse);
 
@@ -179,9 +197,11 @@ void deberiaCrearFichaMedicaCorrectamente() {
 
     when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(medicoResponse);
 
-    FichaMedica Guardado = new FichaMedica(1L, 30.000, "paciente","1-1",
-     "medico","1-2","tratamiento",
-    8, "gestionPagos");
+    FichaMedica Guardado = new FichaMedica( 
+        1L, "paciente","1-1",
+         "medico","1-2","procedimiento",
+    "queMedicamentoEstaTomando", "enfermedad",
+    "alergias","odontograma");
     when(repo.save(any(FichaMedica.class))).thenReturn(Guardado);
 
     // Act
@@ -189,20 +209,20 @@ void deberiaCrearFichaMedicaCorrectamente() {
 
     // Assert
     assertNotNull(resultado);
-    assertEquals(1L, resultado.getId());
-    assertEquals(30.000, resultado.getPresupuesto());
-
     assertNotNull(resultado.getPaciente());
-    assertEquals("paciente", resultado.getPaciente().getNombrePaciente());
     assertEquals("1-1", resultado.getPaciente().getRunPaciente());
+    assertEquals("paciente", resultado.getPaciente().getNombrePaciente());
+    assertEquals("alergias", resultado.getPaciente().getAlergias());
+    assertEquals("enfermedad", resultado.getPaciente().getEnfermedad());
+    assertEquals("queMedicamentoEstaTomando", resultado.getQueMedicamentoEstaTomando());
+
 
     assertNotNull(resultado.getMedico());
     assertEquals("medico", resultado.getMedico().getNombreMedico());
     assertEquals("1-2", resultado.getMedico().getRunMedico());
 
-    assertEquals("tratamiento", resultado.getTratamiento());
-    assertEquals(8, resultado.getDiasDuracion());
-    assertEquals("gestionPagos", resultado.getGestionPagos());
+    assertEquals("procedimiento", resultado.getProcedimiento());
+    assertEquals("odontograma", resultado.getOdontograma());
 
     verify(repo).save(any(FichaMedica.class));
 }
@@ -212,13 +232,19 @@ void deberiaActualizarFichaMedicaCorrectamente() {
     // Arrange
     String tokenDePrueba = "Bearer token-prueba";
 
-    FichaMedica existente = new FichaMedica(1L, 30.000, "paciente","1-1",
-     "medico","1-2","tratamiento",
-    8, "gestionPagos");
+    FichaMedica existente = new FichaMedica( 
+        1L, "paciente","1-1",
+         "medico","1-2","procedimiento",
+    "queMedicamentoEstaTomando", "enfermedad",
+    "alergias","odontograma");
     
     PacienteResponse pacienteResponse = new PacienteResponse();
     pacienteResponse.setRunPaciente("1-1");
     pacienteResponse.setNombrePaciente("paciente");
+    pacienteResponse.setAlergias("alergias");
+    pacienteResponse.setEnfermedad("enfermedad");
+    pacienteResponse.setQueMedicamentoEstaTomando("queMedicamentoEstaTomando");
+    
     
     when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(pacienteResponse);
 
@@ -230,14 +256,15 @@ void deberiaActualizarFichaMedicaCorrectamente() {
 
 
     FichaMedicaDTO dto = new FichaMedicaDTO();
-                    dto.setPresupuesto(30.000);
-                    dto.setNombrePaciente("paciente");    
                     dto.setRunPaciente("1-1");
-                    dto.setNombreMedico("medico");
+                    dto.setNombrePaciente("paciente");
                     dto.setRunMedico("1-2");
-                    dto.setTratamiento("tratamiento");
-                    dto.setDiasDuracion(8);
-                    dto.setGestionPagos("gestionPagos");
+                    dto.setNombreMedico("medico");
+                    dto.setProcedimiento("Procedimiento");
+                    dto.setQueMedicamentoEstaTomando("QueMedicamentoEstaTomando");
+                    dto.setEnfermedad("Enfermedad");
+                    dto.setAlergias("Alergias");
+                    dto.setOdontograma("Odontograma");
 
 
     when(repo.findById(1L)).thenReturn(Optional.of(existente));
@@ -248,20 +275,20 @@ void deberiaActualizarFichaMedicaCorrectamente() {
 
     // Assert
     assertNotNull(resultado);
-    assertEquals(1L, resultado.getId());
-    assertEquals(30.000, resultado.getPresupuesto());
-
     assertNotNull(resultado.getPaciente());
-    assertEquals("paciente", resultado.getPaciente().getNombrePaciente());
     assertEquals("1-1", resultado.getPaciente().getRunPaciente());
+    assertEquals("paciente", resultado.getPaciente().getNombrePaciente());
+    assertEquals("alergias", resultado.getPaciente().getAlergias());
+    assertEquals("enfermedad", resultado.getPaciente().getEnfermedad());
+    assertEquals("queMedicamentoEstaTomando", resultado.getQueMedicamentoEstaTomando());
+
 
     assertNotNull(resultado.getMedico());
     assertEquals("medico", resultado.getMedico().getNombreMedico());
     assertEquals("1-2", resultado.getMedico().getRunMedico());
 
-    assertEquals("tratamiento", resultado.getTratamiento());
-    assertEquals(8, resultado.getDiasDuracion());
-    assertEquals("gestionPagos", resultado.getGestionPagos());
+    assertEquals("procedimiento", resultado.getProcedimiento());
+    assertEquals("odontograma", resultado.getOdontograma());
 
     verify(repo).findById(1L);
     verify(repo).save(existente);
@@ -279,7 +306,7 @@ void deberiaLanzarExcepcionCuandoFichaMedicaNoSeActualizoCorectamente() {
             () -> service.actualizar(99L,null, tokenDePrueba)
     );
 
-    assertEquals("Facturacion y presupuesto encontrado", ex.getMessage());
+    assertEquals("Ficha medica encontrado", ex.getMessage());
     verify(repo).findById(99L);
 }
 
@@ -307,7 +334,7 @@ void deberiaLanzarExcepcionCuandoFichaMedicaNoSeEliminoCorectamente() {
             () -> service.eliminar(99L)
     );
 
-    assertEquals("FacturacionYPresupuesto no encontrado", ex.getMessage());
+    assertEquals("Ficha medica no encontrado", ex.getMessage());
     verify(repo).existsById(99L);
     verify(repo, never()).deleteById(99L); 
 }

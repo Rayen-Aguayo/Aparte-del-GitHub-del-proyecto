@@ -96,7 +96,7 @@ void deberiaLanzarExcepcionCuandoFacturacionYPresupuestoNoExiste() {
             () -> service.obtener(99L, tokenDePrueba)
     );
 
-    assertEquals("Facturacion y presupuesto encontrado", ex.getMessage());
+    assertEquals("Facturacion y presupuesto no encontrado", ex.getMessage());
     verify(repo).findById(99L);
 }
 
@@ -319,7 +319,7 @@ void deberiaLanzarExcepcionCuandoFacturacionYPresupuestoNoSeEliminoCorectamente(
             () -> service.eliminar(99L)
     );
 
-    assertEquals("FacturacionYPresupuesto no encontrado", ex.getMessage());
+    assertEquals("Facturacion y presupuesto no encontrado", ex.getMessage());
     verify(repo).existsById(99L);
     verify(repo, never()).deleteById(99L); 
 }
