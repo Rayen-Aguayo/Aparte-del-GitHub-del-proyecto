@@ -45,7 +45,7 @@ public class MedicoService {
     public Medico actualizar(String id, MedicoDTO dto) { 
         log.info("Actualizar Medico", keyValue("id", id));
 
-        Medico m = obtener(id);  // ahora sí compila, ambos String
+        Medico m = obtener(id);  
         m.setNombreMedico(dto.getNombreMedico());
         m.setEspecialidad(dto.getEspecialidad());
         m.setEdad(dto.getEdad());
