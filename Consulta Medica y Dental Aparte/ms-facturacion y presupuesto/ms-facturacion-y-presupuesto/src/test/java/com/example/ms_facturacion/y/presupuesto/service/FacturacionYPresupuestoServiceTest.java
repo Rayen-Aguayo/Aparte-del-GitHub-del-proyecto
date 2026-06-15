@@ -347,7 +347,7 @@ void deberiaLanzarExcepcionCuandoFacturacionYPresupuestoNoSeActualizoCorectament
             () -> service.actualizar(99L, dto, tokenDePrueba)
     );
 
-    assertEquals("Facturacion y presupuesto encontrado", ex.getMessage());
+    assertEquals("FacturacionYPresupuesto no encontrado", ex.getMessage());
     verify(repo).findById(99L);
 }
 
