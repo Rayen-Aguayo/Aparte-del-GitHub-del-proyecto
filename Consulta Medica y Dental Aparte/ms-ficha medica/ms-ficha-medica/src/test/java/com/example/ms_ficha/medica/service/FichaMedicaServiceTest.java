@@ -239,6 +239,25 @@ void deberiaCrearFichaMedicaCorrectamente() {
 
     verify(repo).save(any(FichaMedica.class));
 }
+@Test
+void deberiaLanzarExcepcionCuandoFichaMedicaNoExisteAlCrear() {
+    // Arrange
+    FichaMedicaDTO dto = new FichaMedicaDTO();
+    dto.setRunPaciente("1-1");
+    dto.setRunMedico("1-2");
+    String tokenDePrueba = "Bearer token-prueba";
+
+    when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(null); 
+
+    // Act + Assert
+    RuntimeException ex = assertThrows(
+            RuntimeException.class,
+            () -> service.crear(dto, tokenDePrueba)
+    );
+
+    assertEquals("el paciente no existe no se puede crear la Ficha medica", ex.getMessage());
+    verify(repo, never()).save(any()); // ✅ Nunca debió guardar
+}
 
 @Test
 void deberiaActualizarFichaMedicaCorrectamente() {
