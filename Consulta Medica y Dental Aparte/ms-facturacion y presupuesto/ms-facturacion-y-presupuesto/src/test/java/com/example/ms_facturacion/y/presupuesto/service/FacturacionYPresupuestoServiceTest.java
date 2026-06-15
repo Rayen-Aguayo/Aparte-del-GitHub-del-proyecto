@@ -218,6 +218,48 @@ void deberiaCrearFacturacionYPresupuestoCorrectamente() {
 
     verify(repo).save(any(FacturacionYPresupuesto.class));
 }
+@Test
+void deberiaLanzarExcepcionCuandoPacienteNoExisteAlCrear() {
+    // Arrange
+    String tokenDePrueba = "Bearer token-prueba";
+
+    FacturacionYPresupuestoDTO dto = new FacturacionYPresupuestoDTO();
+    dto.setRunPaciente("1-1");
+    when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(null); 
+
+    dto.setRunMedico("1-2");
+    when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(null); 
+
+    // Act + Assert
+    RuntimeException ex = assertThrows(
+            RuntimeException.class,
+            () -> service.crear(dto, tokenDePrueba)
+    );
+
+    assertEquals("el paciente no existe no se puede crear la facturacion y el presupuesto", ex.getMessage());
+    verify(repo, never()).save(any()); 
+}
+
+@Test
+void deberiaLanzarExcepcionCuandoMedicoNoExisteAlCrear() {
+    // Arrange
+    String tokenDePrueba = "Bearer token-prueba";
+    FacturacionYPresupuestoDTO dto = new FacturacionYPresupuestoDTO();
+    dto.setRunPaciente("1-1");
+    when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(null);
+
+    dto.setRunMedico("1-2");
+    
+    when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(null); 
+    // Act + Assert
+    RuntimeException ex = assertThrows(
+            RuntimeException.class,
+            () -> service.crear(dto, tokenDePrueba)
+    );
+
+    assertEquals("El médico no existe no se puede crear la facturacion y el presupuesto", ex.getMessage());
+    verify(repo, never()).save(any());
+}
 
 @Test
 void deberiaActualizarFacturacionYPresupuestoCorrectamente() {

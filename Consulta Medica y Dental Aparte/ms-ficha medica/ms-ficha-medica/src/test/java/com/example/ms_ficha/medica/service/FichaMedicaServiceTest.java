@@ -256,7 +256,7 @@ void deberiaLanzarExcepcionCuandoFichaMedicaNoExisteAlCrear() {
     );
 
     assertEquals("el paciente no existe no se puede crear la Ficha medica", ex.getMessage());
-    verify(repo, never()).save(any()); // ✅ Nunca debió guardar
+    verify(repo, never()).save(any()); 
 }
 
 @Test
