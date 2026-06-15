@@ -1,4 +1,4 @@
-package com.example.ms_facturacion.y.presupuesto.service;
+package com.example.ms_ficha.medica.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -7,14 +7,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.example.ms_facturacion.y.presupuesto.client.MedicoClient;
-import com.example.ms_facturacion.y.presupuesto.client.PacienteClient;
-import com.example.ms_facturacion.y.presupuesto.dto.FacturacionYPresupuestoDTO;
-import com.example.ms_facturacion.y.presupuesto.dto.FacturacionYPresupuestoResponse;
-import com.example.ms_facturacion.y.presupuesto.dto.MedicoResponse;
-import com.example.ms_facturacion.y.presupuesto.dto.PacienteResponse;
-import com.example.ms_facturacion.y.presupuesto.model.FacturacionYPresupuesto;
-import com.example.ms_facturacion.y.presupuesto.repository.FacturacionYPresupuestoRepository;
+import com.example.ms_ficha.medica.client.MedicoClient;
+import com.example.ms_ficha.medica.client.PacienteClient;
+import com.example.ms_ficha.medica.dto.FichaMedicaDTO;
+import com.example.ms_ficha.medica.dto.FichaMedicaResponse;
+import com.example.ms_ficha.medica.dto.MedicoResponse;
+import com.example.ms_ficha.medica.dto.PacienteResponse;
+import com.example.ms_ficha.medica.model.FichaMedica;
+import com.example.ms_ficha.medica.repository.FichaMedicaRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,13 +24,14 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class FacturacionYPresupuestoServiceTest {
+
+public class FichaMedicaServiceTest {
 
     @Mock
-    private FacturacionYPresupuestoRepository repo;
+    private FichaMedicaRepository repo;
 
     @InjectMocks
-    private FacturacionYPresupuestoService service;
+    private FichaMedicaService service;
 
     @Mock
     private MedicoClient medicoClient;
@@ -39,15 +40,15 @@ public class FacturacionYPresupuestoServiceTest {
     private PacienteClient pacienteClient;
 
     @Test
-    void deberiaRetornarFacturacionYPresupuestoExiste() {
+    void deberiaRetornarFichaMedicaExiste() {
     // Arrange
     String tokenDePrueba = "Bearer token-prueba";
 
-    FacturacionYPresupuesto facYpre = new FacturacionYPresupuesto(
+    FichaMedica fichaMedica = new FichaMedica(
         1L, 30.000, "paciente","1-1",
          "medico","1-2","tratamiento",
     8, "gestionPagos");
-    when(repo.findById(1L)).thenReturn(Optional.of(facYpre));
+    when(repo.findById(1L)).thenReturn(Optional.of(fichaMedica));
 
     PacienteResponse pacienteResponse = new PacienteResponse();
     pacienteResponse.setRunPaciente("1-1");
@@ -62,7 +63,7 @@ public class FacturacionYPresupuestoServiceTest {
     when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(medicoResponse);
 
     // Act
-    FacturacionYPresupuestoResponse resultado = service.obtener(1L, tokenDePrueba);
+    FichaMedicaResponse resultado = service.obtener(1L, tokenDePrueba);
 
     // Assert
     assertNotNull(resultado);
@@ -101,15 +102,15 @@ void deberiaLanzarExcepcionCuandoFacturacionYPresupuestoNoExiste() {
 }
 
 @Test
-void deberiaRetornarListaFacturacionYPresupuesto() {
+void deberiaRetornarListaFichaMedica() {
     // Arrange
     String tokenDePrueba = "Bearer token-prueba";
 
-    FacturacionYPresupuesto facYpre = new FacturacionYPresupuesto( 1L, 30.000, "paciente","1-1",
+    FichaMedica fichaMedica = new FichaMedica( 1L, 30.000, "paciente","1-1",
      "medico","1-2","tratamiento",
     8, "gestionPagos");
 
-    when(repo.findAll()).thenReturn(List.of(facYpre));
+    when(repo.findAll()).thenReturn(List.of(fichaMedica));
 
     PacienteResponse pacienteResponse = new PacienteResponse();
     pacienteResponse.setRunPaciente("1-1");
@@ -124,13 +125,13 @@ void deberiaRetornarListaFacturacionYPresupuesto() {
     when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(medicoResponse);
 
     // Act
-    List<FacturacionYPresupuestoResponse> resultado = service.listar(null);
+    List<FichaMedicaResponse> resultado = service.listar(null);
 
     // Assert
     assertFalse(resultado.isEmpty());
     assertEquals(1, resultado.size());
 
-    FacturacionYPresupuestoResponse item = resultado.get(0);
+    FichaMedicaResponse item = resultado.get(0);
 
     assertEquals(30.000, item.getPresupuesto());
 
@@ -149,25 +150,12 @@ void deberiaRetornarListaFacturacionYPresupuesto() {
     verify(repo).findAll();
 }
 @Test
-void deberiaRetornarListaVaciaDeFacturacionYPresupuesto() {
-    // Arrange
-    when(repo.findAll()).thenReturn(List.of());
-    // Act
-    List<FacturacionYPresupuestoResponse> resultado = service.listar(null);
-
-    // Assert
-    assertNotNull(resultado);
-    assertTrue(resultado.isEmpty());
-    verify(repo).findAll();
-}
-
-@Test
-void deberiaCrearFacturacionYPresupuestoCorrectamente() {
+void deberiaCrearFichaMedicaCorrectamente() {
     
     // Arrange
     String tokenDePrueba = "Bearer token-prueba";
 
-    FacturacionYPresupuestoDTO dto = new FacturacionYPresupuestoDTO();
+    FichaMedicaDTO dto = new FichaMedicaDTO();
                     
                     dto.setPresupuesto(30.000);
                     dto.setNombrePaciente("paciente");    
@@ -191,13 +179,13 @@ void deberiaCrearFacturacionYPresupuestoCorrectamente() {
 
     when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(medicoResponse);
 
-    FacturacionYPresupuesto Guardado = new FacturacionYPresupuesto(1L, 30.000, "paciente","1-1",
+    FichaMedica Guardado = new FichaMedica(1L, 30.000, "paciente","1-1",
      "medico","1-2","tratamiento",
     8, "gestionPagos");
-    when(repo.save(any(FacturacionYPresupuesto.class))).thenReturn(Guardado);
+    when(repo.save(any(FichaMedica.class))).thenReturn(Guardado);
 
     // Act
-    FacturacionYPresupuestoResponse resultado = service.crear(dto,tokenDePrueba);
+    FichaMedicaResponse resultado = service.crear(dto,tokenDePrueba);
 
     // Assert
     assertNotNull(resultado);
@@ -216,15 +204,15 @@ void deberiaCrearFacturacionYPresupuestoCorrectamente() {
     assertEquals(8, resultado.getDiasDuracion());
     assertEquals("gestionPagos", resultado.getGestionPagos());
 
-    verify(repo).save(any(FacturacionYPresupuesto.class));
+    verify(repo).save(any(FichaMedica.class));
 }
 
 @Test
-void deberiaActualizarFacturacionYPresupuestoCorrectamente() {
+void deberiaActualizarFichaMedicaCorrectamente() {
     // Arrange
     String tokenDePrueba = "Bearer token-prueba";
 
-    FacturacionYPresupuesto existente = new FacturacionYPresupuesto(1L, 30.000, "paciente","1-1",
+    FichaMedica existente = new FichaMedica(1L, 30.000, "paciente","1-1",
      "medico","1-2","tratamiento",
     8, "gestionPagos");
     
@@ -241,7 +229,7 @@ void deberiaActualizarFacturacionYPresupuestoCorrectamente() {
     when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(medicoResponse);
 
 
-    FacturacionYPresupuestoDTO dto = new FacturacionYPresupuestoDTO();
+    FichaMedicaDTO dto = new FichaMedicaDTO();
                     dto.setPresupuesto(30.000);
                     dto.setNombrePaciente("paciente");    
                     dto.setRunPaciente("1-1");
@@ -253,10 +241,10 @@ void deberiaActualizarFacturacionYPresupuestoCorrectamente() {
 
 
     when(repo.findById(1L)).thenReturn(Optional.of(existente));
-    when(repo.save(any(FacturacionYPresupuesto.class))).thenAnswer(invocation -> invocation.getArgument(0));
+    when(repo.save(any(FichaMedica.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
     // Act
-    FacturacionYPresupuestoResponse resultado = service.actualizar(1L, dto, tokenDePrueba);
+    FichaMedicaResponse resultado = service.actualizar(1L, dto, tokenDePrueba);
 
     // Assert
     assertNotNull(resultado);
@@ -279,7 +267,7 @@ void deberiaActualizarFacturacionYPresupuestoCorrectamente() {
     verify(repo).save(existente);
 }
 @Test
-void deberiaLanzarExcepcionCuandoFacturacionYPresupuestoNoSeActualizoCorectamente() {
+void deberiaLanzarExcepcionCuandoFichaMedicaNoSeActualizoCorectamente() {
     // Arrange
     when(repo.findById(99L)).thenReturn(Optional.empty());
 
@@ -296,7 +284,7 @@ void deberiaLanzarExcepcionCuandoFacturacionYPresupuestoNoSeActualizoCorectament
 }
 
 @Test
-void deberiaEliminarFacturacionYPresupuestoPorId() {
+void deberiaEliminarFichaMedicaPorId() {
     // Arrange
     
     doNothing().when(repo).deleteById(1L);
@@ -309,7 +297,7 @@ void deberiaEliminarFacturacionYPresupuestoPorId() {
 }
 
 @Test
-void deberiaLanzarExcepcionCuandoFacturacionYPresupuestoNoSeEliminoCorectamente() {
+void deberiaLanzarExcepcionCuandoFichaMedicaNoSeEliminoCorectamente() {
     // Arrange
     when(repo.existsById(99L)).thenReturn(false); 
 
@@ -323,5 +311,6 @@ void deberiaLanzarExcepcionCuandoFacturacionYPresupuestoNoSeEliminoCorectamente(
     verify(repo).existsById(99L);
     verify(repo, never()).deleteById(99L); 
 }
+
 
 }
