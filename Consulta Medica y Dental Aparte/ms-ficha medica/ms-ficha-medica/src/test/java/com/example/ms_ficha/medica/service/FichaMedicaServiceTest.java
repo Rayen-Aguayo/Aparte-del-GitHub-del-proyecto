@@ -163,6 +163,19 @@ void deberiaRetornarListaFichaMedica() {
     verify(repo).findAll();
 }
 @Test
+void deberiaRetornarListaVaciaDeFichaMedica() {
+    // Arrange
+    when(repo.findAll()).thenReturn(List.of());
+    // Act
+    List<FichaMedicaResponse> resultado = service.listar(null);
+
+    // Assert
+    assertNotNull(resultado);
+    assertTrue(resultado.isEmpty());
+    verify(repo).findAll();
+}
+
+@Test
 void deberiaCrearFichaMedicaCorrectamente() {
     
     // Arrange
