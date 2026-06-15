@@ -7,8 +7,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.example.ms_facturacion.y.presupuesto.client.MedicoClient;
+import com.example.ms_facturacion.y.presupuesto.client.PacienteClient;
 import com.example.ms_facturacion.y.presupuesto.dto.FacturacionYPresupuestoDTO;
 import com.example.ms_facturacion.y.presupuesto.dto.FacturacionYPresupuestoResponse;
+import com.example.ms_facturacion.y.presupuesto.dto.MedicoResponse;
+import com.example.ms_facturacion.y.presupuesto.dto.PacienteResponse;
 import com.example.ms_facturacion.y.presupuesto.model.FacturacionYPresupuesto;
 import com.example.ms_facturacion.y.presupuesto.repository.FacturacionYPresupuestoRepository;
 
@@ -28,16 +32,34 @@ public class FacturacionYPresupuestoServiceTest {
     @InjectMocks
     private FacturacionYPresupuestoService service;
 
+    @Mock
+    private MedicoClient medicoClient;
+    
+    @Mock
+    private PacienteClient pacienteClient;
+
     @Test
     void deberiaRetornarFacturacionYPresupuestoExiste() {
     // Arrange
+    String tokenDePrueba = "Bearer token-prueba";
+
     FacturacionYPresupuesto facYpre = new FacturacionYPresupuesto(
         1L, 30.000, "paciente","1-1",
          "medico","1-2","tratamiento",
     8, "gestionPagos");
     when(repo.findById(1L)).thenReturn(Optional.of(facYpre));
+
+    PacienteResponse pacienteResponse = new PacienteResponse();
+    pacienteResponse.setRunPaciente("1-1");
+    pacienteResponse.setNombrePaciente("paciente");
     
-    String tokenDePrueba = "Bearer token-prueba";
+    when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(pacienteResponse);
+
+    MedicoResponse medicoResponse = new MedicoResponse();
+    medicoResponse.setRunMedico("1-2");
+    medicoResponse.setNombreMedico("medico");
+
+    when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(medicoResponse);
 
     // Act
     FacturacionYPresupuestoResponse resultado = service.obtener(1L, tokenDePrueba);
@@ -79,13 +101,27 @@ void deberiaLanzarExcepcionCuandoFacturacionYPresupuestoNoExiste() {
 }
 
 @Test
-void deberiaRetornarListaAutores() {
+void deberiaRetornarListaFacturacionYPresupuesto() {
     // Arrange
+    String tokenDePrueba = "Bearer token-prueba";
+
     FacturacionYPresupuesto facYpre = new FacturacionYPresupuesto( 1L, 30.000, "paciente","1-1",
      "medico","1-2","tratamiento",
     8, "gestionPagos");
 
     when(repo.findAll()).thenReturn(List.of(facYpre));
+
+    PacienteResponse pacienteResponse = new PacienteResponse();
+    pacienteResponse.setRunPaciente("1-1");
+    pacienteResponse.setNombrePaciente("paciente");
+    
+    when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(pacienteResponse);
+
+    MedicoResponse medicoResponse = new MedicoResponse();
+    medicoResponse.setRunMedico("1-2");
+    medicoResponse.setNombreMedico("medico");
+
+    when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(medicoResponse);
 
     // Act
     List<FacturacionYPresupuestoResponse> resultado = service.listar(null);
@@ -116,6 +152,8 @@ void deberiaRetornarListaAutores() {
 void deberiaCrearFacturacionYPresupuestoCorrectamente() {
     
     // Arrange
+    String tokenDePrueba = "Bearer token-prueba";
+
     FacturacionYPresupuestoDTO dto = new FacturacionYPresupuestoDTO();
                     
                     dto.setPresupuesto(30.000);
@@ -127,7 +165,18 @@ void deberiaCrearFacturacionYPresupuestoCorrectamente() {
                     dto.setDiasDuracion(8);
                     dto.setGestionPagos("gestionPagos");
 
-    String tokenDePrueba = "Bearer token-prueba";
+
+    PacienteResponse pacienteResponse = new PacienteResponse();
+    pacienteResponse.setRunPaciente("1-1");
+    pacienteResponse.setNombrePaciente("paciente");
+    
+    when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(pacienteResponse);
+
+    MedicoResponse medicoResponse = new MedicoResponse();
+    medicoResponse.setRunMedico("1-2");
+    medicoResponse.setNombreMedico("medico");
+
+    when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(medicoResponse);
 
     FacturacionYPresupuesto Guardado = new FacturacionYPresupuesto(1L, 30.000, "paciente","1-1",
      "medico","1-2","tratamiento",
@@ -160,9 +209,24 @@ void deberiaCrearFacturacionYPresupuestoCorrectamente() {
 @Test
 void deberiaActualizarFacturacionYPresupuestoCorrectamente() {
     // Arrange
+    String tokenDePrueba = "Bearer token-prueba";
+
     FacturacionYPresupuesto existente = new FacturacionYPresupuesto(1L, 30.000, "paciente","1-1",
      "medico","1-2","tratamiento",
     8, "gestionPagos");
+    
+    PacienteResponse pacienteResponse = new PacienteResponse();
+    pacienteResponse.setRunPaciente("1-1");
+    pacienteResponse.setNombrePaciente("paciente");
+    
+    when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(pacienteResponse);
+
+    MedicoResponse medicoResponse = new MedicoResponse();
+    medicoResponse.setRunMedico("1-2");
+    medicoResponse.setNombreMedico("medico");
+
+    when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(medicoResponse);
+
 
     FacturacionYPresupuestoDTO dto = new FacturacionYPresupuestoDTO();
                     dto.setPresupuesto(30.000);
@@ -174,7 +238,6 @@ void deberiaActualizarFacturacionYPresupuestoCorrectamente() {
                     dto.setDiasDuracion(8);
                     dto.setGestionPagos("gestionPagos");
 
-            String tokenDePrueba = "Bearer token-prueba";
 
     when(repo.findById(1L)).thenReturn(Optional.of(existente));
     when(repo.save(any(FacturacionYPresupuesto.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -203,7 +266,7 @@ void deberiaActualizarFacturacionYPresupuestoCorrectamente() {
     verify(repo).save(existente);
 }
 @Test
-void deberiaLanzarExcepcionCuandoFacturacionYPresupuestoNoEeActualizoorrectamente() {
+void deberiaLanzarExcepcionCuandoFacturacionYPresupuestoNoSeActualizoCorectamente() {
     // Arrange
     when(repo.findById(99L)).thenReturn(Optional.empty());
 
@@ -212,7 +275,7 @@ void deberiaLanzarExcepcionCuandoFacturacionYPresupuestoNoEeActualizoorrectament
 
     EntityNotFoundException ex = assertThrows(
             EntityNotFoundException.class,
-            () -> service.obtener(99L, tokenDePrueba)
+            () -> service.actualizar(99L,null, tokenDePrueba)
     );
 
     assertEquals("Facturacion y presupuesto encontrado", ex.getMessage());
@@ -222,6 +285,7 @@ void deberiaLanzarExcepcionCuandoFacturacionYPresupuestoNoEeActualizoorrectament
 @Test
 void deberiaEliminarFacturacionYPresupuestoPorId() {
     // Arrange
+    
     doNothing().when(repo).deleteById(1L);
 
     // Act
@@ -230,4 +294,21 @@ void deberiaEliminarFacturacionYPresupuestoPorId() {
     // Assert
     verify(repo).deleteById(1L);
 }
+
+@Test
+void deberiaLanzarExcepcionCuandoFacturacionYPresupuestoNoSeEliminoCorectamente() {
+    // Arrange
+    when(repo.existsById(99L)).thenReturn(false); 
+
+    // Act + Assert
+    EntityNotFoundException ex = assertThrows(
+            EntityNotFoundException.class,
+            () -> service.eliminar(99L)
+    );
+
+    assertEquals("FacturacionYPresupuesto no encontrado", ex.getMessage());
+    verify(repo).existsById(99L);
+    verify(repo, never()).deleteById(99L); 
+}
+
 }
