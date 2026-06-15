@@ -326,12 +326,19 @@ void deberiaLanzarExcepcionCuandoFacturacionYPresupuestoNoSeActualizoCorectament
     // Arrange
     FacturacionYPresupuestoDTO dto = new FacturacionYPresupuestoDTO();
     String tokenDePrueba = "Bearer token-prueba";
-    dto.setRunPaciente("11111111-1"); // ← setear para que coincida con el when
-    dto.setRunMedico("22222222-2");   // ← setear para que coincida con el when
-    // los demás campos no importan para este test
+    dto.setRunPaciente("11111111-1");
+    dto.setRunMedico("22222222-2");
 
-    when(pacienteClient.getPacienteClient("11111111-1", tokenDePrueba)).thenReturn(buildPaciente());
-    when(medicoClient.getMedicoClient("22222222-2", tokenDePrueba)).thenReturn(buildMedico());
+    PacienteResponse paciente = new PacienteResponse();
+    paciente.setRunPaciente("11111111-1");
+    paciente.setNombrePaciente("Juan Pérez");
+
+    MedicoResponse medico = new MedicoResponse();
+    medico.setRunMedico("22222222-2");
+    medico.setNombreMedico("Dra. Soto");
+
+    when(pacienteClient.getPacienteClient("11111111-1", tokenDePrueba)).thenReturn(paciente);
+    when(medicoClient.getMedicoClient("22222222-2", tokenDePrueba)).thenReturn(medico);
     when(repo.findById(99L)).thenReturn(Optional.empty());
 
     // Act + Assert
