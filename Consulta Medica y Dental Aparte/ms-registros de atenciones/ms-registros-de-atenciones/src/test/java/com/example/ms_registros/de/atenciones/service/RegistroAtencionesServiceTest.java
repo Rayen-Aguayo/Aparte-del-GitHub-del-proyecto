@@ -274,7 +274,7 @@ public class RegistroAtencionesServiceTest {
     }
 
     @Test
-void deberiaLanzarExcepcionAlActualizarSiPacienteNoExiste() {
+    void deberiaLanzarExcepcionAlActualizarSiPacienteNoExiste() {
     // Arrange
     RegistroAtencionesDTO dto = new RegistroAtencionesDTO();
     dto.setRunpaciente("99999999-9");
@@ -291,10 +291,10 @@ void deberiaLanzarExcepcionAlActualizarSiPacienteNoExiste() {
 
     assertEquals("el paciente no existe", ex.getMessage());
     verify(repository, never()).save(any());
-}
+    }
 
-@Test
-void deberiaLanzarExcepcionAlActualizarSiMedicoNoExiste() {
+    @Test
+    void deberiaLanzarExcepcionAlActualizarSiMedicoNoExiste() {
     // Arrange
     RegistroAtencionesDTO dto = new RegistroAtencionesDTO();
     dto.setRunpaciente("11111111-1");
@@ -316,10 +316,10 @@ void deberiaLanzarExcepcionAlActualizarSiMedicoNoExiste() {
 
     assertEquals("El médico no existe", ex.getMessage());
     verify(repository, never()).save(any());
-}
+    }
 
-@Test
-void deberiaLanzarExcepcionAlActualizarSiPagoNoExiste() {
+    @Test
+    void deberiaLanzarExcepcionAlActualizarSiPagoNoExiste() {
     // Arrange
     RegistroAtencionesDTO dto = new RegistroAtencionesDTO();
     dto.setRunpaciente("11111111-1");
