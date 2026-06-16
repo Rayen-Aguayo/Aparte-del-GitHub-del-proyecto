@@ -20,7 +20,7 @@ import static net.logstash.logback.argument.StructuredArguments.keyValue;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class RecetamedicaService {
+public class RecetaMedicaService {
 
     private final RecetaMedicaRepository recetamedicaRepository;
     private final MedicoClient medicoClient;

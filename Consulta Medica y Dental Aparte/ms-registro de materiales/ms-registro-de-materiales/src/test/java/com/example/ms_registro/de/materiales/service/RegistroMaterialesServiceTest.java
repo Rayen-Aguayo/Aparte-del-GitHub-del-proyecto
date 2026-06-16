@@ -84,7 +84,7 @@ public class RegistroMaterialesServiceTest {
         when(repository.findById(1L)).thenReturn(Optional.of(
             new RegistroMateriales(
                 1L, 10,
-                "Guantes, Mascarilas",
+                "Guantes, Mascarillas",
                 LocalDate.of(2027, 1, 1)
             )
         )
