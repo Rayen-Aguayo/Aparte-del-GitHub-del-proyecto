@@ -73,21 +73,20 @@ public class FichaMedicaService {
         return mapToResponse(fichaMedica, token);
     }
 
-    public FichaMedicaResponse actualizar(
-            Long id,
-            FichaMedicaDTO dto,
-            String token) {
-        var paciente = pacienteClient.getPacienteClient(dto.getRunPaciente(),token);
+    public FichaMedicaResponse actualizar(Long id, FichaMedicaDTO dto, String token) {
+
+        FichaMedica ficha = fichaMedicaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Ficha médica no encontrada"));
+
+        var paciente = pacienteClient.getPacienteClient(dto.getRunPaciente(), token);
         if (paciente == null) {
             throw new RuntimeException("El paciente no existe");
         }
-        var medico = medicoClient.getMedicoClient(dto.getRunMedico(),token);
+        var medico = medicoClient.getMedicoClient(dto.getRunMedico(), token);
         if (medico == null) {
             throw new RuntimeException("El médico no existe");
         }
 
-        FichaMedica ficha = fichaMedicaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Ficha médica no encontrada"));
         ficha.setRunPaciente(dto.getRunPaciente());
         ficha.setNombrePaciente(dto.getNombrePaciente());
         ficha.setRunMedico(dto.getRunMedico());
@@ -97,10 +96,8 @@ public class FichaMedicaService {
         ficha.setEnfermedad(dto.getEnfermedad());
         ficha.setAlergias(dto.getAlergias());
         ficha.setOdontograma(dto.getOdontograma());
-        FichaMedica fichaActualizada =
-                fichaMedicaRepository.save(ficha);
 
-        return mapToResponse(fichaActualizada, token);
+        return mapToResponse(fichaMedicaRepository.save(ficha), token);
     }
 
     public void eliminar(Long id) {

@@ -37,7 +37,7 @@ public class OpinionPacienteService {
         var medico = medicoClient.getMedicoClient(dto.getRunMedico(),token);
 
         if (medico == null) {
-            throw new RuntimeException("El médico no existe");
+            throw new RuntimeException("El médico no existe, no se puede registrar la opinión");
         }
 
         OpinionPaciente opinionPaciente = opinionPacienteRepository.save(

@@ -28,41 +28,41 @@ public class MedicoServiceTest {
 
     @Test
     void deberiaRetornarMedicoCuandoExiste() {
-        Medico medico = new Medico("1-2","nombre", 28, "123456789",
+        Medico medico = new Medico("22222222-2","medico", 28, "123456789",
             "especialidad","firmaMedico"
         );
 
-        when(repo.findById("1-2")).thenReturn(Optional.of(medico));
+        when(repo.findById("22222222-2")).thenReturn(Optional.of(medico));
 
-        Medico resultado = service.obtener("1-2");
+        Medico resultado = service.obtener("22222222-2");
 
         assertNotNull(resultado);
-        assertEquals("1-2", resultado.getRunMedico());
-        assertEquals("nombre", resultado.getNombreMedico());
+        assertEquals("22222222-2", resultado.getRunMedico());
+        assertEquals("medico", resultado.getNombreMedico());
         assertEquals(28, resultado.getEdad());
         assertEquals("123456789", resultado.getNroTelefono());
         assertEquals("especialidad", resultado.getEspecialidad());
         assertEquals("firmaMedico", resultado.getFirmaMedico());
 
-        verify(repo).findById("1-2");
+        verify(repo).findById("22222222-2");
     }
 
     @Test
     void deberiaLanzarExcepcionCuandoMedicoNoExiste() {
-        when(repo.findById("99")).thenReturn(Optional.empty());
+        when(repo.findById("9999999-9")).thenReturn(Optional.empty());
 
         EntityNotFoundException ex = assertThrows(
                 EntityNotFoundException.class,
-                () -> service.obtener("99")
+                () -> service.obtener("9999999-9")
         );
 
         assertEquals("Medico no encontrado", ex.getMessage());
-        verify(repo).findById("99");
+        verify(repo).findById("9999999-9");
     }
 
     @Test
     void deberiaRetornarListaMedicos() {
-        Medico medico = new Medico("1-2","nombre", 28, "123456789",
+        Medico medico = new Medico("22222222-2","medico", 28, "123456789",
             "especialidad","firmaMedico"
         );
         when(repo.findAll()).thenReturn(List.of(medico));
@@ -71,7 +71,7 @@ public class MedicoServiceTest {
 
         assertFalse(resultado.isEmpty());
         assertEquals(1, resultado.size());
-        assertEquals("nombre", resultado.get(0).getNombreMedico());
+        assertEquals("medico", resultado.get(0).getNombreMedico());
         verify(repo).findAll();
     }
 
@@ -84,7 +84,7 @@ public class MedicoServiceTest {
         dto.getNroTelefono();
         dto.getFirmaMedico();
 
-        Medico Guardado = new Medico("1-2","nombre", 28, "123456789",
+        Medico Guardado = new Medico("22222222-2","medico", 28, "123456789",
             "especialidad","firmaMedico"
         );
         when(repo.save(any(Medico.class))).thenReturn(Guardado);
@@ -92,8 +92,8 @@ public class MedicoServiceTest {
         Medico resultado = service.crear(dto);
 
         assertNotNull(resultado);
-        assertEquals("1-2", resultado.getRunMedico());
-        assertEquals("nombre", resultado.getNombreMedico());
+        assertEquals("22222222-2", resultado.getRunMedico());
+        assertEquals("medico", resultado.getNombreMedico());
         assertEquals(28, resultado.getEdad());
         assertEquals("123456789", resultado.getNroTelefono());
         assertEquals("especialidad", resultado.getEspecialidad());
@@ -103,24 +103,24 @@ public class MedicoServiceTest {
 
     @Test
     void deberiaActualizarMedicoCorrectamente() {
-        Medico existente = new Medico("1-2","nombre", 28, "123456789",
+        Medico existente = new Medico("22222222-2","medico nuevo", 28, "123456789",
             "especialidad","firmaMedico"
         );
 
         MedicoDTO dto = new MedicoDTO();
-        dto.getNombreMedico();
-        dto.getEspecialidad();
-        dto.getEdad();
-        dto.getNroTelefono();
-        dto.getFirmaMedico();
+        dto.setNombreMedico("medico nuevo");
+        dto.setEspecialidad("especialidad");
+        dto.setEdad(28);
+        dto.setNroTelefono("123456789");
+        dto.setFirmaMedico("firmaMedico");
 
-        when(repo.findById("1-2")).thenReturn(Optional.of(existente));
+        when(repo.findById("22222222-2")).thenReturn(Optional.of(existente));
         when(repo.save(any(Medico.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Medico resultado = service.actualizar("1-2", dto);
+        Medico resultado = service.actualizar("22222222-2", dto);
 
-        assertEquals("1-2", resultado.getRunMedico());
-        assertEquals("nombre", resultado.getNombreMedico());
+        assertEquals("22222222-2", resultado.getRunMedico());
+        assertEquals("medico nuevo", resultado.getNombreMedico());
         assertEquals(28, resultado.getEdad());
         assertEquals("123456789", resultado.getNroTelefono());
         assertEquals("especialidad", resultado.getEspecialidad());
@@ -131,11 +131,11 @@ public class MedicoServiceTest {
 
     @Test
     void deberiaEliminarMedicoPorId() {
-        doNothing().when(repo).deleteById("1-2");
+        doNothing().when(repo).deleteById("22222222-2");
 
-        service.eliminar("1-2");
+        service.eliminar("22222222-2");
 
-        verify(repo).deleteById("1-2");
+        verify(repo).deleteById("22222222-2");
     }
 }
 
