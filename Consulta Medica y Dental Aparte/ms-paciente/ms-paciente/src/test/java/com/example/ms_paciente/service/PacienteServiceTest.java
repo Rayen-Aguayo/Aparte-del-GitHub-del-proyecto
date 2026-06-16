@@ -57,7 +57,7 @@ public class PacienteServiceTest {
                 () -> service.obtener("11111111-9")
         );
 
-        assertEquals("Paciente no encontrado", ex.getMessage());
+        assertEquals("paciente no encontrado", ex.getMessage());
         verify(repo).findById("11111111-9");
     }
 
