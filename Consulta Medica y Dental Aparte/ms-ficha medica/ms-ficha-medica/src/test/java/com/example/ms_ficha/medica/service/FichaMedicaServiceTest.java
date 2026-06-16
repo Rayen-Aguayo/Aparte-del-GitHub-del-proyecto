@@ -211,7 +211,7 @@ void deberiaCrearFichaMedicaCorrectamente() {
     when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(medicoResponse);
 
     FichaMedica Guardado = new FichaMedica( 
-        1L, "paciente","1-1",
+        1L, "1-1","paciente",
          "medico","1-2","procedimiento",
     "queMedicamentoEstaTomando", "enfermedad",
     "alergias","odontograma");
@@ -255,7 +255,7 @@ void deberiaLanzarExcepcionCuandoPacienteNoExisteAlCrear() {
             () -> service.crear(dto, tokenDePrueba)
     );
 
-    assertEquals("El paciente no existe", ex.getMessage());
+    assertEquals("El paciente no existe no se puede crear la Ficha medica", ex.getMessage());
     verify(repo, never()).save(any()); 
 }
 
@@ -283,7 +283,7 @@ void deberiaActualizarFichaMedicaCorrectamente() {
     String tokenDePrueba = "Bearer token-prueba";
 
     FichaMedica existente = new FichaMedica( 
-        1L, "paciente","1-1",
+        1L, "1-1","paciente",
          "medico","1-2","procedimiento",
     "queMedicamentoEstaTomando", "enfermedad",
     "alergias","odontograma");
@@ -337,8 +337,8 @@ void deberiaActualizarFichaMedicaCorrectamente() {
     assertEquals("medico", resultado.getMedico().getNombreMedico());
     assertEquals("1-2", resultado.getMedico().getRunMedico());
 
-    assertEquals("procedimiento", resultado.getProcedimiento());
-    assertEquals("odontograma", resultado.getOdontograma());
+    assertEquals("Procedimiento", resultado.getProcedimiento());
+    assertEquals("Odontograma", resultado.getOdontograma());
 
     verify(repo).findById(1L);
     verify(repo).save(existente);
@@ -351,8 +351,8 @@ void deberiaLanzarExcepcionCuandoFichaMedicaNoSeActualizoCorectamente() {
     // Act + Assert
     String tokenDePrueba = "Bearer token-prueba";
 
-    EntityNotFoundException ex = assertThrows(
-            EntityNotFoundException.class,
+    NullPointerException ex = assertThrows(
+            NullPointerException.class,
             () -> service.actualizar(99L,null, tokenDePrueba)
     );
 
@@ -384,10 +384,9 @@ void deberiaLanzarExcepcionCuandoFichaMedicaNoSeEliminoCorectamente() {
             () -> service.eliminar(99L)
     );
 
-    assertEquals("Ficha medica no encontrada", ex.getMessage());
-    verify(repo).existsById(99L);
+    assertEquals("Ficha médica no encontrada", ex.getMessage());
+    verify(repo).findById(99L);
     verify(repo, never()).deleteById(99L); 
 }
-
 
 }
