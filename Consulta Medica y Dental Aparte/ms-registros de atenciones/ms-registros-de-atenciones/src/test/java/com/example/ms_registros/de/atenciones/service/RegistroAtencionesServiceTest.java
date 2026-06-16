@@ -272,7 +272,8 @@ public class RegistroAtencionesServiceTest {
         assertEquals("Registro de atenciones no se encontro", ex.getMessage());
         verify(repository).findById(99L);
     }
-     @Test
+    
+    @Test
     void deberiaActualizarRegistroCorrectamente() {
         // Arrange
         RegistroAtencionesDTO dto = new RegistroAtencionesDTO();
@@ -328,8 +329,6 @@ public class RegistroAtencionesServiceTest {
         verify(repository).save(existente);
     }
 
-    // ─── Test: actualizar - no existe ─────────────────────────────────────────
-
     @Test
     void deberiaLanzarExcepcionAlActualizarSiRegistroNoExiste() {
         // Arrange
@@ -363,7 +362,7 @@ public class RegistroAtencionesServiceTest {
         assertEquals("Registro de atenciones no encontrado", ex.getMessage());
         verify(repository, never()).save(any());
     }
-    
+
     @Test
     void deberiaEliminarRegistroPorId() {
         doNothing().when(repository).deleteById(1L);
