@@ -98,7 +98,7 @@ void deberiaLanzarExcepcionCuandoOpinionPacienteNoExiste() {
             () -> service.obtener(99L, tokenDePrueba)
     );
 
-    assertEquals("Ficha médica no encontrada", ex.getMessage());
+    assertEquals("Opinión no encontrada", ex.getMessage());
     verify(repo).findById(99L);
 }
 
@@ -238,7 +238,7 @@ void deberiaLanzarExcepcionCuandoPacienteNoExisteAlCrear() {
             () -> service.crear(dto, tokenDePrueba)
     );
 
-    assertEquals("El paciente no existe no se puede crear la Ficha medica", ex.getMessage());
+    assertEquals("El paciente no existe, no se puede registrar la opinión", ex.getMessage());
     verify(repo, never()).save(any()); 
 }
 
@@ -261,7 +261,7 @@ void deberiaLanzarExcepcionCuandoMedicoNoExisteAlCrear() {
             () -> service.crear(dto, tokenDePrueba)
     );
 
-    assertEquals("El médico no existe no se puede crear la Ficha medica", ex.getMessage()); 
+    assertEquals("El médico no existe, no se puede registrar la opinión", ex.getMessage()); 
     verify(repo, never()).save(any());
 }
 
@@ -289,7 +289,7 @@ void deberiaLanzarExcepcionCuandoOpinionPacienteNoSeEliminoCorectamente() {
             () -> service.eliminar(99L)
     );
 
-    assertEquals("Ficha médica no encontrada", ex.getMessage());
+    assertEquals("No se puede eliminar, opinión no encontrada", ex.getMessage());
     verify(repo).findById(99L);
     verify(repo, never()).deleteById(99L); 
 }
