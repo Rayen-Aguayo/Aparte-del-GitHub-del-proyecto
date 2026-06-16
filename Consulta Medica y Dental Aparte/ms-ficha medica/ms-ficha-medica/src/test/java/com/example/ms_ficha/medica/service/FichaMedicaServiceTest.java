@@ -105,7 +105,7 @@ void deberiaLanzarExcepcionCuandoFichaMedicaNoExiste() {
             () -> service.obtener(99L, tokenDePrueba)
     );
 
-    assertEquals("Ficha medica no encontrada", ex.getMessage());
+    assertEquals("Ficha médica no encontrada", ex.getMessage());
     verify(repo).findById(99L);
 }
 
@@ -210,12 +210,12 @@ void deberiaCrearFichaMedicaCorrectamente() {
 
     when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(medicoResponse);
 
-    FichaMedica Guardado = new FichaMedica( 
-        1L, "1-1","paciente",
-         "medico","1-2","procedimiento",
-    "queMedicamentoEstaTomando", "enfermedad",
-    "alergias","odontograma");
-    when(repo.save(any(FichaMedica.class))).thenReturn(Guardado);
+    FichaMedica guardado = new FichaMedica( 
+        1L, "1-1", "paciente",
+        "1-2", "medico", "procedimiento",
+        "queMedicamentoEstaTomando", "enfermedad",
+        "alergias", "odontograma");
+    when(repo.save(any(FichaMedica.class))).thenReturn(guardado);
 
     // Act
     FichaMedicaResponse resultado = service.crear(dto,tokenDePrueba);
@@ -264,16 +264,21 @@ void deberiaLanzarExcepcionCuandoMedicoNoExisteAlCrear() {
     // Arrange
     String tokenDePrueba = "Bearer token-prueba";
     FichaMedicaDTO dto = new FichaMedicaDTO();
-
+    dto.setRunPaciente("1-1");
     dto.setRunMedico("1-2");
-    when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(null); 
-    // Act + Assert
+
+    PacienteResponse pacienteResponse = new PacienteResponse();
+    pacienteResponse.setRunPaciente("1-1");
+    when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(pacienteResponse);
+
+    when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(null);
+
     RuntimeException ex = assertThrows(
             RuntimeException.class,
             () -> service.crear(dto, tokenDePrueba)
     );
 
-    assertEquals("El médico no existe", ex.getMessage());
+    assertEquals("El médico no existe no se puede crear la Ficha medica", ex.getMessage()); 
     verify(repo, never()).save(any());
 }
 
@@ -351,12 +356,12 @@ void deberiaLanzarExcepcionCuandoFichaMedicaNoSeActualizoCorectamente() {
     // Act + Assert
     String tokenDePrueba = "Bearer token-prueba";
 
-    NullPointerException ex = assertThrows(
-            NullPointerException.class,
-            () -> service.actualizar(99L,null, tokenDePrueba)
+    EntityNotFoundException ex = assertThrows(
+            EntityNotFoundException.class,  
+            () -> service.actualizar(99L, null, tokenDePrueba)
     );
 
-    assertEquals("Ficha medica no encontrada", ex.getMessage());
+    assertEquals("Ficha médica no encontrada", ex.getMessage()); 
     verify(repo).findById(99L);
 }
 
