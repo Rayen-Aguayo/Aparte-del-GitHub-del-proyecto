@@ -255,7 +255,7 @@ void deberiaLanzarExcepcionCuandoPacienteNoExisteAlCrear() {
             () -> service.crear(dto, tokenDePrueba)
     );
 
-    assertEquals("El paciente no existe no se puede crear la Ficha medica", ex.getMessage());
+    assertEquals("El paciente no existe", ex.getMessage());
     verify(repo, never()).save(any()); 
 }
 
@@ -273,7 +273,7 @@ void deberiaLanzarExcepcionCuandoMedicoNoExisteAlCrear() {
             () -> service.crear(dto, tokenDePrueba)
     );
 
-    assertEquals("El médico no existe no se puede crear la Ficha medica", ex.getMessage());
+    assertEquals("El médico no existe", ex.getMessage());
     verify(repo, never()).save(any());
 }
 
@@ -384,7 +384,7 @@ void deberiaLanzarExcepcionCuandoFichaMedicaNoSeEliminoCorectamente() {
             () -> service.eliminar(99L)
     );
 
-    assertEquals("Ficha medica no encontrado", ex.getMessage());
+    assertEquals("Ficha medica no encontrada", ex.getMessage());
     verify(repo).existsById(99L);
     verify(repo, never()).deleteById(99L); 
 }
