@@ -196,8 +196,9 @@ public class PedirHoraServiceTest {
     @Test
     void deberiaActualizarReservaCorrectamente() {
         // Arrange
-        PedirHora existente = new PedirHora(1L, "11111111-1", "Juan Pérez", "22222222-2", "Dra. Soto",
-                LocalDate.of(2026, 6, 20), LocalTime.of(10, 30), "Consulta dental");
+        PedirHora existente = new PedirHora
+            (1L, "11111111-1", "Juan Pérez", "22222222-2", "Dra. Soto",
+            LocalDate.of(2026, 6, 20), LocalTime.of(10, 30), "Consulta dental");
 
         PedirHoraDTO dto = new PedirHoraDTO();
         dto.setRunPaciente("11111111-1");
