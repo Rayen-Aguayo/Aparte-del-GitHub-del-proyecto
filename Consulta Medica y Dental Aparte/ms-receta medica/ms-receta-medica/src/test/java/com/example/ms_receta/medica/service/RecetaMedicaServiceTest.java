@@ -5,7 +5,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,17 +14,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.example.ms_receta.medica.client.MedicoClient;
+import com.example.ms_receta.medica.dto.MedicoResponse;
+import com.example.ms_receta.medica.dto.RecetaMedicaDTO;
+import com.example.ms_receta.medica.dto.RecetaMedicaResponce;
+import com.example.ms_receta.medica.model.RecetaMedica;
 import com.example.ms_receta.medica.repository.RecetaMedicaRepository;
-import com.example.ms_registros.de.atenciones.client.MedicoClient;
-import com.example.ms_registros.de.atenciones.client.PacienteClient;
-import com.example.ms_registros.de.atenciones.client.PagosClient;
-import com.example.ms_registros.de.atenciones.dto.MedicoResponse;
-import com.example.ms_registros.de.atenciones.dto.PacienteResponse;
-import com.example.ms_registros.de.atenciones.dto.PagosResponse;
-import com.example.ms_registros.de.atenciones.dto.RegistroAtencionesDTO;
-import com.example.ms_registros.de.atenciones.dto.RegistroAtencionesResponse;
-import com.example.ms_registros.de.atenciones.model.RegistroAtenciones;
-import com.example.ms_registros.de.atenciones.repository.RegistroAtencionesRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -39,431 +33,219 @@ public class RecetaMedicaServiceTest {
     private MedicoClient medicoClient;
 
     @InjectMocks
-    private RecetaMedicaService service;
+    private RecetamedicaService service;
 
     private final String token = "Bearer token-de-prueba";
 
     @Test
-    void deberiaCrearRegistroDeAtencionCorrectamente() {
-        //Arrange
-        RegistroAtencionesDTO dto = new RegistroAtencionesDTO();
-        dto.setRunpaciente("11111111-1");
-        dto.setNompaciente("Juan Pérez");
-        dto.setRunmedico("22222222-2");
-        dto.setNommedico("Dra. Soto");
-        dto.setTotal(45000.0);
-        dto.setIdPago(1);
-        dto.setFecha(LocalDate.of(2026, 6, 20));
-        dto.setHora(LocalTime.of(10, 30));
-        dto.setTratamientoRealizado("Extración Molar");
-
-        PacienteResponse paciente = new PacienteResponse();
-        paciente.setRunPaciente("11111111-1");
-        paciente.setNombrePaciente("Juan Pérez");
+    void deberiaCrearRecetaMedicaCorrectamente() {
+        // Arrange
+        RecetaMedicaDTO dto = new RecetaMedicaDTO();
+        dto.setRunMedico("22222222-2");
+        dto.setNomMedico("Dra. Soto");
+        dto.setNomMedicamento("Ibuprofeno");
+        dto.setDiasTomarMedicamento(7);
+        dto.setInicioReceta(LocalDate.of(2026, 6, 20));
+        dto.setCantTomarDia(3);
+        dto.setFirmaMedico("Firma Dra. Soto");
 
         MedicoResponse medico = new MedicoResponse();
         medico.setRunMedico("22222222-2");
         medico.setNombreMedico("Dra. Soto");
-        
-        PagosResponse pagos = new PagosResponse();
-        pagos.setId(1L);
-        pagos.setTotal(45000.0);
-        pagos.setEstado("PAGADO");
 
-        when(pacienteClient.getPacienteClient("11111111-1", token)).thenReturn(paciente);
         when(medicoClient.getMedicoClient("22222222-2", token)).thenReturn(medico);
-        when(pagosClient.getPagosClient(1, token)).thenReturn(pagos);
-        when(repository.save(any(RegistroAtenciones.class))).thenReturn(
-        new RegistroAtenciones(
-            1L,
-            "Juan Pérez",
-            "11111111-1",
-            "Dra. Soto",
-            "22222222-2",
-            45000.0,
-            1,
-            LocalDate.of(2026, 6, 20),
-            LocalTime.of(10, 30),
-            "Extración Molar"
-        )
-    );
-        RegistroAtencionesResponse resultado = service.crear(dto, token);
-
-        assertNotNull(resultado);
-        assertEquals(1L, resultado.getId());
-        assertEquals("Juan Pérez", resultado.getPaciente().getNombrePaciente());
-        assertEquals("Dra. Soto", resultado.getMedico().getNombreMedico());
-        assertEquals("PAGADO", resultado.getPago().getEstado());
-        assertEquals("Extración Molar", resultado.getTratamientoRealizado());
-       verify(repository).save(any(RegistroAtenciones.class));
-    }
-
-    @Test
-    void deberiaLanzarExcepcionAlCrearSiPacienteNoExiste() {
-        //Arrange
-        RegistroAtencionesDTO dto = new RegistroAtencionesDTO();
-        dto.setRunpaciente("11111111-1");
-        
-        when(pacienteClient.getPacienteClient("11111111-1", token)).thenReturn(null);
-
-        // Act + Assert
-        RuntimeException ex = assertThrows(
-                RuntimeException.class,
-                () -> service.crear(dto, token)
+        when(repository.save(any(RecetaMedica.class))).thenReturn(
+            new RecetaMedica(
+                1L,
+                "Ibuprofeno",
+                7,
+                LocalDate.of(2026, 6, 20),
+                "Dra. Soto",
+                "22222222-2",
+                3,
+                "Firma Dra. Soto"
+            )
         );
 
-        assertEquals("el paciente no existe", ex.getMessage());
-        verify(repository, never()).save(any(RegistroAtenciones.class));
+        // Act
+        RecetaMedicaResponce resultado = service.crear(dto, token);
+
+        // Assert
+        assertNotNull(resultado);
+        assertEquals(1L, resultado.getId());
+        assertEquals("Ibuprofeno", resultado.getNomMedicamento());
+        assertEquals(7, resultado.getDiasTomarMedicamento());
+        assertEquals("Dra. Soto", resultado.getMedico().getNombreMedico());
+        verify(repository).save(any(RecetaMedica.class));
     }
 
     @Test
     void deberiaLanzarExcepcionAlCrearSiMedicoNoExiste() {
         // Arrange
-        RegistroAtencionesDTO dto = new RegistroAtencionesDTO();
-        dto.setRunpaciente("11111111-1");
-        dto.setRunmedico("22222222-2");
+        RecetaMedicaDTO dto = new RecetaMedicaDTO();
+        dto.setRunMedico("99999999-9");
 
-        PacienteResponse paciente = new PacienteResponse();
-        paciente.setRunPaciente("11111111-1");
-        paciente.setNombrePaciente("Juan Pérez");
+        when(medicoClient.getMedicoClient("99999999-9", token)).thenReturn(null);
 
-        when(pacienteClient.getPacienteClient("11111111-1", token)).thenReturn(paciente);
-        when(medicoClient.getMedicoClient("22222222-2", token)).thenReturn(null);
-        
         // Act + Assert
         RuntimeException ex = assertThrows(
                 RuntimeException.class,
                 () -> service.crear(dto, token)
         );
 
-        assertEquals("El médico no existe", ex.getMessage());
-        verify(repository, never()).save(any(RegistroAtenciones.class));
+        assertEquals("Médico no existe", ex.getMessage());
+        verify(repository, never()).save(any());
     }
 
     @Test
-    void deberiaLanzarExcepcionAlCrearSiPagoNoExiste() {
-        RegistroAtencionesDTO dto = new RegistroAtencionesDTO();
-        dto.setRunpaciente("11111111-1");
-        dto.setRunmedico("22222222-2");        
-        dto.setIdPago(1);
-
-        PacienteResponse paciente = new PacienteResponse();
-        paciente.setRunPaciente("11111111-1");
-        paciente.setNombrePaciente("Juan Pérez");
-
-        MedicoResponse medico = new MedicoResponse();
-        medico.setRunMedico("22222222-2");
-        medico.setNombreMedico("Dra. Soto");
-
-        when(pacienteClient.getPacienteClient("11111111-1", token)).thenReturn(paciente);
-        when(medicoClient.getMedicoClient("22222222-2", token)).thenReturn(medico);
-        when(pagosClient.getPagosClient(1, token)).thenReturn(null);
-
-        RuntimeException ex = assertThrows(
-                RuntimeException.class,
-                () -> service.crear(dto, token)
-        );
-
-        assertEquals("El pago no existe", ex.getMessage());
-        verify(repository, never()).save(any(RegistroAtenciones.class));
-    }
-
-    @Test
-    void deberiaRetornarListaDeRegistros() {
+    void deberiaRetornarListaDeRecetas() {
         // Arrange
-        PacienteResponse paciente = new PacienteResponse();
-        paciente.setRunPaciente("11111111-1");
-        paciente.setNombrePaciente("Juan Pérez");
-
         MedicoResponse medico = new MedicoResponse();
         medico.setRunMedico("22222222-2");
         medico.setNombreMedico("Dra. Soto");
-
-        PagosResponse pagos = new PagosResponse();
-        pagos.setId(1L);
-        pagos.setTotal(45000.0);
-        pagos.setEstado("PAGADO");
 
         when(repository.findAll()).thenReturn(List.of(
-            new RegistroAtenciones(
+            new RecetaMedica(
                 1L,
-                "Juan Pérez",
-                "11111111-1",
+                "Ibuprofeno",
+                7,
+                LocalDate.of(2026, 6, 20),
                 "Dra. Soto",
                 "22222222-2",
-                45000.0,
-                1,
-                LocalDate.of(2026, 6, 20),
-                LocalTime.of(10, 30),
-                "Extración Molar"
+                3,
+                "Firma Dra. Soto"
             )
         ));
-        when(pacienteClient.getPacienteClient("11111111-1", token)).thenReturn(paciente);
         when(medicoClient.getMedicoClient("22222222-2", token)).thenReturn(medico);
-        when(pagosClient.getPagosClient(1, token)).thenReturn(pagos);
 
         // Act
-        List<RegistroAtencionesResponse> resultado = service.listar(token);
+        List<RecetaMedicaResponce> resultado = service.listar(token);
 
         // Assert
         assertFalse(resultado.isEmpty());
         assertEquals(1, resultado.size());
-        assertEquals("Juan Pérez", resultado.get(0).getPaciente().getNombrePaciente());
+        assertEquals("Ibuprofeno", resultado.get(0).getNomMedicamento());
         verify(repository).findAll();
     }
 
     @Test
-    void deberiaRetornarRegistroCuandoExiste() {
+    void deberiaRetornarRecetaCuandoExiste() {
         // Arrange
-        PacienteResponse paciente = new PacienteResponse();
-        paciente.setRunPaciente("11111111-1");
-        paciente.setNombrePaciente("Juan Pérez");
-
         MedicoResponse medico = new MedicoResponse();
         medico.setRunMedico("22222222-2");
         medico.setNombreMedico("Dra. Soto");
 
-        PagosResponse pagos = new PagosResponse();
-        pagos.setId(1L);
-        pagos.setEstado("PAGADO");
-
         when(repository.findById(1L)).thenReturn(Optional.of(
-            new RegistroAtenciones(
+            new RecetaMedica(
                 1L,
-                "Juan Pérez",
-                "11111111-1",
+                "Ibuprofeno",
+                7,
+                LocalDate.of(2026, 6, 20),
                 "Dra. Soto",
                 "22222222-2",
-                45000.0,
-                1,
-                LocalDate.of(2026, 6, 20),
-                LocalTime.of(10, 30),
-                "Extración Molar"
+                3,
+                "Firma Dra. Soto"
             )
         ));
-        when(pacienteClient.getPacienteClient("11111111-1", token)).thenReturn(paciente);
         when(medicoClient.getMedicoClient("22222222-2", token)).thenReturn(medico);
-        when(pagosClient.getPagosClient(1, token)).thenReturn(pagos);
 
         // Act
-        RegistroAtencionesResponse resultado = service.obtener(1L, token);
+        RecetaMedicaResponce resultado = service.obtener(1L, token);
 
         // Assert
         assertNotNull(resultado);
         assertEquals(1L, resultado.getId());
-        assertEquals("Extración Molar", resultado.getTratamientoRealizado());
+        assertEquals("Ibuprofeno", resultado.getNomMedicamento());
         verify(repository).findById(1L);
     }
-    
+
+
     @Test
-    void deberiaLanzarExcepcionCuandoRegistroNoExiste() {
+    void deberiaLanzarExcepcionCuandoRecetaNoExiste() {
+        // Arrange
         when(repository.findById(99L)).thenReturn(Optional.empty());
 
+        // Act + Assert
         EntityNotFoundException ex = assertThrows(
                 EntityNotFoundException.class,
                 () -> service.obtener(99L, token)
         );
 
-        assertEquals("Registro de atenciones no se encontro", ex.getMessage());
+        assertEquals("Receta médica no encontrada", ex.getMessage());
         verify(repository).findById(99L);
     }
 
     @Test
-    void deberiaLanzarExcepcionAlActualizarSiPacienteNoExiste() {
-    // Arrange
-    RegistroAtencionesDTO dto = new RegistroAtencionesDTO();
-    dto.setRunpaciente("99999999-9");
-    dto.setRunmedico("22222222-2");
-    dto.setIdPago(1);
-
-    when(pacienteClient.getPacienteClient("99999999-9", token)).thenReturn(null);
-
-    // Act + Assert
-    RuntimeException ex = assertThrows(
-            RuntimeException.class,
-            () -> service.actualizar(99L, dto, token)
-    );
-
-    assertEquals("el paciente no existe", ex.getMessage());
-    verify(repository, never()).save(any());
-    }
-
-    @Test
-    void deberiaLanzarExcepcionAlActualizarSiMedicoNoExiste() {
-    // Arrange
-    RegistroAtencionesDTO dto = new RegistroAtencionesDTO();
-    dto.setRunpaciente("11111111-1");
-    dto.setRunmedico("99999999-9");
-    dto.setIdPago(1);
-
-    PacienteResponse paciente = new PacienteResponse();
-    paciente.setRunPaciente("11111111-1");
-    paciente.setNombrePaciente("Juan Pérez");
-
-    when(pacienteClient.getPacienteClient("11111111-1", token)).thenReturn(paciente);
-    when(medicoClient.getMedicoClient("99999999-9", token)).thenReturn(null);
-
-    // Act + Assert
-    RuntimeException ex = assertThrows(
-            RuntimeException.class,
-            () -> service.actualizar(99L, dto, token)
-    );
-
-    assertEquals("El médico no existe", ex.getMessage());
-    verify(repository, never()).save(any());
-    }
-
-    @Test
-    void deberiaLanzarExcepcionAlActualizarSiPacienteNoExiste1() {
-    // Arrange
-    RegistroAtencionesDTO dto = new RegistroAtencionesDTO();
-    dto.setRunpaciente("99999999-9");
-    dto.setRunmedico("22222222-2");
-
-    when(pacienteClient.getPacienteClient("99999999-9", token)).thenReturn(null);
-
-    // Act + Assert
-    RuntimeException ex = assertThrows(
-            RuntimeException.class,
-            () -> service.actualizar(99L, dto, token)
-    );
-
-    assertEquals("el paciente no existe", ex.getMessage());
-    verify(repository, never()).save(any(RegistroAtenciones.class));
-    }
-
-    @Test
-    void deberiaLanzarExcepcionAlActualizarSiMedicoNoExiste1() {
-    // Arrange
-    RegistroAtencionesDTO dto = new RegistroAtencionesDTO();
-    dto.setRunpaciente("11111111-1");
-    dto.setRunmedico("99999999-9");
-
-    PacienteResponse paciente = new PacienteResponse();
-    paciente.setRunPaciente("11111111-1");
-    paciente.setNombrePaciente("Juan Pérez");
-
-    when(pacienteClient.getPacienteClient("11111111-1", token)).thenReturn(paciente);
-    when(medicoClient.getMedicoClient("99999999-9", token)).thenReturn(null);
-
-    // Act + Assert
-    RuntimeException ex = assertThrows(
-            RuntimeException.class,
-            () -> service.actualizar(99L, dto, token)
-    );
-
-    assertEquals("El médico no existe", ex.getMessage());
-    verify(repository, never()).save(any(RegistroAtenciones.class));
-    }
-
-    @Test
-    void deberiaLanzarExcepcionAlActualizarSiPagoNoExiste() {
-    // Arrange
-    RegistroAtencionesDTO dto = new RegistroAtencionesDTO();
-    dto.setRunpaciente("11111111-1");
-    dto.setRunmedico("22222222-2");
-    dto.setIdPago(1);
-
-    PacienteResponse paciente = new PacienteResponse();
-    paciente.setRunPaciente("11111111-1");
-    paciente.setNombrePaciente("Juan Pérez");
-
-    MedicoResponse medico = new MedicoResponse();
-    medico.setRunMedico("22222222-2");
-    medico.setNombreMedico("Dra. Soto");
-
-    when(pacienteClient.getPacienteClient("11111111-1", token)).thenReturn(paciente);
-    when(medicoClient.getMedicoClient("22222222-2", token)).thenReturn(medico);
-    when(pagosClient.getPagosClient(1, token)).thenReturn(null);
-
-    // Act + Assert
-    RuntimeException ex = assertThrows(
-            RuntimeException.class,
-            () -> service.actualizar(99L, dto, token)
-    );
-
-    assertEquals("El pago no existe", ex.getMessage());
-    verify(repository, never()).save(any());
-    }
-
-    @Test
-    void deberiaActualizarRegistroCorrectamente() {
+    void deberiaActualizarRecetaCorrectamente() {
         // Arrange
-        RegistroAtencionesDTO dto = new RegistroAtencionesDTO();
-        dto.setRunpaciente("11111111-1");
-        dto.setNompaciente("Juan Pérez");
-        dto.setRunmedico("22222222-2");
-        dto.setNommedico("Dra. Soto");
-        dto.setTotal(45000.0);
-        dto.setIdPago(1);
-        dto.setFecha(LocalDate.of(2026, 6, 25));
-        dto.setHora(LocalTime.of(11, 0));
-        dto.setTratamientoRealizado("Control");
+        RecetaMedicaDTO dto = new RecetaMedicaDTO();
+        dto.setRunMedico("22222222-2");
+        dto.setNomMedico("Dra. Soto");
+        dto.setNomMedicamento("Paracetamol");
+        dto.setDiasTomarMedicamento(5);
+        dto.setInicioReceta(LocalDate.of(2026, 6, 25));
+        dto.setCantTomarDia(2);
+        dto.setFirmaMedico("Firma Dra. Soto");
 
-        RegistroAtenciones existente = new RegistroAtenciones(
+        RecetaMedica existente = new RecetaMedica(
             1L,
-            "Juan Pérez",
-            "11111111-1",
+            "Ibuprofeno",
+            7,
+            LocalDate.of(2026, 6, 20),
             "Dra. Soto",
             "22222222-2",
-            45000.0,
-            1,
-            LocalDate.of(2026, 6, 20),
-            LocalTime.of(10, 30),
-            "Extración Molar"
+            3,
+            "Firma Dra. Soto"
         );
-
-        PacienteResponse paciente = new PacienteResponse();
-        paciente.setRunPaciente("11111111-1");
-        paciente.setNombrePaciente("Juan Pérez");
 
         MedicoResponse medico = new MedicoResponse();
         medico.setRunMedico("22222222-2");
         medico.setNombreMedico("Dra. Soto");
 
-        PagosResponse pagos = new PagosResponse();
-        pagos.setId(1L);
-        pagos.setEstado("PAGADO");
-
-        when(pacienteClient.getPacienteClient("11111111-1", token)).thenReturn(paciente);
         when(medicoClient.getMedicoClient("22222222-2", token)).thenReturn(medico);
-        when(pagosClient.getPagosClient(1, token)).thenReturn(pagos);
         when(repository.findById(1L)).thenReturn(Optional.of(existente));
-        when(repository.save(any(RegistroAtenciones.class))).thenAnswer(inv -> inv.getArgument(0));
+        when(repository.save(any(RecetaMedica.class))).thenAnswer(inv -> inv.getArgument(0));
 
         // Act
-        RegistroAtencionesResponse resultado = service.actualizar(1L, dto, token);
+        RecetaMedicaResponce resultado = service.actualizar(1L, dto, token);
 
         // Assert
-        assertEquals(LocalDate.of(2026, 6, 25), resultado.getFecha());
-        assertEquals(LocalTime.of(11, 0), resultado.getHora());
-        assertEquals("Control", resultado.getTratamientoRealizado());
+        assertEquals("Paracetamol", resultado.getNomMedicamento());
+        assertEquals(5, resultado.getDiasTomarMedicamento());
+        assertEquals(LocalDate.of(2026, 6, 25), resultado.getInicioReceta());
         verify(repository).findById(1L);
         verify(repository).save(existente);
     }
 
     @Test
-    void deberiaLanzarExcepcionAlActualizarSiRegistroNoExiste() {
+    void deberiaLanzarExcepcionAlActualizarSiMedicoNoExiste() {
         // Arrange
-        RegistroAtencionesDTO dto = new RegistroAtencionesDTO();
-        dto.setRunpaciente("11111111-1");
-        dto.setRunmedico("22222222-2");
-        dto.setIdPago(1);
+        RecetaMedicaDTO dto = new RecetaMedicaDTO();
+        dto.setRunMedico("99999999-9");
 
-        PacienteResponse paciente = new PacienteResponse();
-        paciente.setRunPaciente("11111111-1");
-        paciente.setNombrePaciente("Juan Pérez");
+        when(medicoClient.getMedicoClient("99999999-9", token)).thenReturn(null);
+
+        // Act + Assert
+        RuntimeException ex = assertThrows(
+                RuntimeException.class,
+                () -> service.actualizar(99L, dto, token)
+        );
+
+        assertEquals("Médico no existe", ex.getMessage());
+        verify(repository, never()).save(any());
+    }
+
+    @Test
+    void deberiaLanzarExcepcionAlActualizarSiRecetaNoExiste() {
+        // Arrange
+        RecetaMedicaDTO dto = new RecetaMedicaDTO();
+        dto.setRunMedico("22222222-2");
 
         MedicoResponse medico = new MedicoResponse();
         medico.setRunMedico("22222222-2");
         medico.setNombreMedico("Dra. Soto");
 
-        PagosResponse pagos = new PagosResponse();
-        pagos.setEstado("PAGADO");
-
-        when(pacienteClient.getPacienteClient("11111111-1", token)).thenReturn(paciente);
         when(medicoClient.getMedicoClient("22222222-2", token)).thenReturn(medico);
-        when(pagosClient.getPagosClient(1, token)).thenReturn(pagos);
         when(repository.findById(99L)).thenReturn(Optional.empty());
 
         // Act + Assert
@@ -472,16 +254,19 @@ public class RecetaMedicaServiceTest {
                 () -> service.actualizar(99L, dto, token)
         );
 
-        assertEquals("Registro de atenciones no encontrado", ex.getMessage());
+        assertEquals("Receta médica no encontrada", ex.getMessage());
         verify(repository, never()).save(any());
     }
 
     @Test
-    void deberiaEliminarRegistroPorId() {
+    void deberiaEliminarRecetaPorId() {
+        // Arrange
         doNothing().when(repository).deleteById(1L);
 
+        // Act
         service.eliminar(1L);
 
+        // Assert
         verify(repository).deleteById(1L);
     }
 }
