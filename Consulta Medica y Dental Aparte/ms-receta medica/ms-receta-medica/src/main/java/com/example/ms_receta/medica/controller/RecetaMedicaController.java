@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.ms_receta.medica.dto.ApiResponse;
 import com.example.ms_receta.medica.dto.RecetaMedicaDTO;
 import com.example.ms_receta.medica.dto.RecetaMedicaResponce;
-import com.example.ms_receta.medica.service.RecetamedicaService;
+import com.example.ms_receta.medica.service.RecetaMedicaService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 @RequiredArgsConstructor
 public class RecetaMedicaController {
 
-    private final RecetamedicaService recetamedicaService;
+    private final RecetaMedicaService recetamedicaService;
 
     @Operation(
     summary = "Crear receta médica",
