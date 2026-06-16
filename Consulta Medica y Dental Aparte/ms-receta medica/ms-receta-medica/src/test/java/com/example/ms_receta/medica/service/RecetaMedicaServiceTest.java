@@ -33,7 +33,7 @@ public class RecetaMedicaServiceTest {
     private MedicoClient medicoClient;
 
     @InjectMocks
-    private RecetamedicaService service;
+    private RecetaMedicaService service;
 
     private final String token = "Bearer token-de-prueba";
 
