@@ -96,7 +96,7 @@ void deberiaLanzarExcepcionCuandoFacturacionYPresupuestoNoExiste() {
             () -> service.obtener(99L, tokenDePrueba)
     );
 
-    assertEquals("Facturacion y presupuesto no encontrado", ex.getMessage());
+    assertEquals("FacturacionYPresupuesto no encontrado", ex.getMessage());
     verify(repo).findById(99L);
 }
 
@@ -221,9 +221,9 @@ void deberiaCrearFacturacionYPresupuestoCorrectamente() {
 @Test
 void deberiaLanzarExcepcionCuandoPacienteNoExisteAlCrear() {
     // Arrange
+    FacturacionYPresupuestoDTO dto = new FacturacionYPresupuestoDTO();
     String tokenDePrueba = "Bearer token-prueba";
 
-    FacturacionYPresupuestoDTO dto = new FacturacionYPresupuestoDTO();
     dto.setRunPaciente("1-1");
     when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(null); 
 
@@ -243,8 +243,9 @@ void deberiaLanzarExcepcionCuandoPacienteNoExisteAlCrear() {
 @Test
 void deberiaLanzarExcepcionCuandoMedicoNoExisteAlCrear() {
     // Arrange
-    String tokenDePrueba = "Bearer token-prueba";
     FacturacionYPresupuestoDTO dto = new FacturacionYPresupuestoDTO();
+    String tokenDePrueba = "Bearer token-prueba";
+    
     dto.setRunPaciente("1-1");
     when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(null);
 
@@ -323,17 +324,30 @@ void deberiaActualizarFacturacionYPresupuestoCorrectamente() {
 @Test
 void deberiaLanzarExcepcionCuandoFacturacionYPresupuestoNoSeActualizoCorectamente() {
     // Arrange
+    FacturacionYPresupuestoDTO dto = new FacturacionYPresupuestoDTO();
+    String tokenDePrueba = "Bearer token-prueba";
+    dto.setRunPaciente("11111111-1");
+    dto.setRunMedico("22222222-2");
+
+    PacienteResponse paciente = new PacienteResponse();
+    paciente.setRunPaciente("11111111-1");
+    paciente.setNombrePaciente("Juan Pérez");
+
+    MedicoResponse medico = new MedicoResponse();
+    medico.setRunMedico("22222222-2");
+    medico.setNombreMedico("Dra. Soto");
+
+    when(pacienteClient.getPacienteClient("11111111-1", tokenDePrueba)).thenReturn(paciente);
+    when(medicoClient.getMedicoClient("22222222-2", tokenDePrueba)).thenReturn(medico);
     when(repo.findById(99L)).thenReturn(Optional.empty());
 
     // Act + Assert
-    String tokenDePrueba = "Bearer token-prueba";
-
     EntityNotFoundException ex = assertThrows(
             EntityNotFoundException.class,
-            () -> service.actualizar(99L,null, tokenDePrueba)
+            () -> service.actualizar(99L, dto, tokenDePrueba)
     );
 
-    assertEquals("Facturacion y presupuesto encontrado", ex.getMessage());
+    assertEquals("FacturacionYPresupuesto no encontrado", ex.getMessage());
     verify(repo).findById(99L);
 }
 
