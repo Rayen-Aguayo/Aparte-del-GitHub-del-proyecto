@@ -179,6 +179,49 @@ public class PedirHoraServiceTest {
     }
 
     @Test
+    void deberiaLanzarExcepcionAlActualizarSiPacienteNoExiste() {
+    // Arrange
+    PedirHoraDTO dto = new PedirHoraDTO();
+    dto.setRunPaciente("99999999-9");
+    dto.setRunMedico("22222222-2");
+
+    when(pacienteClient.getPacienteClient("99999999-9", token)).thenReturn(null);
+
+    // Act + Assert
+    RuntimeException ex = assertThrows(
+            RuntimeException.class,
+            () -> service.actualizar(99L, dto, token)
+    );
+
+    assertEquals("el paciente no existe", ex.getMessage());
+    verify(repo, never()).save(any(PedirHora.class));
+    }
+
+    @Test
+    void deberiaLanzarExcepcionAlActualizarSiMedicoNoExiste() {
+    // Arrange
+    PedirHoraDTO dto = new PedirHoraDTO();
+    dto.setRunPaciente("11111111-1");
+    dto.setRunMedico("99999999-9");
+
+    PacienteResponse paciente = new PacienteResponse();
+    paciente.setRunPaciente("11111111-1");
+    paciente.setNombrePaciente("Juan Pérez");
+
+    when(pacienteClient.getPacienteClient("11111111-1", token)).thenReturn(paciente);
+    when(medicoClient.getMedicoClient("99999999-9", token)).thenReturn(null);
+
+    // Act + Assert
+    RuntimeException ex = assertThrows(
+            RuntimeException.class,
+            () -> service.actualizar(99L, dto, token)
+    );
+
+    assertEquals("El médico no existe", ex.getMessage());
+    verify(repo, never()).save(any(PedirHora.class));
+    }
+
+    @Test
     void deberiaLanzarExcepcionCuandoReservaNoExiste() {
         // Arrange
         when(repo.findById(99L)).thenReturn(Optional.empty());
