@@ -3,9 +3,9 @@ package com.example.ms_reservar.y.anular.hora.repository;
 import com.example.ms_reservar.y.anular.hora.model.PedirHora;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -14,9 +14,9 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@SpringBootTest
 @ActiveProfiles("test")
+@Transactional
 class PedirHoraRepositoryTest {
 
     @Autowired
@@ -25,18 +25,18 @@ class PedirHoraRepositoryTest {
     @Test
     void debeGuardarReserva() {
         PedirHora reserva = new PedirHora(
-            null, 
-            "11111111-1", 
+            null,
+            "11111111-1",
             "Juan Pérez",
-            "22222222-2", 
+            "22222222-2",
             "Dra. Soto",
-            LocalDate.of(2026, 6, 20), 
-            LocalTime.of(10, 30), 
+            LocalDate.of(2026, 6, 20),
+            LocalTime.of(10, 30),
             "Consulta dental"
         );
 
         PedirHora guardado = repository.save(reserva);
-
+        
         assertNotNull(guardado.getId());
         assertEquals("Juan Pérez", guardado.getNombrePaciente());
         assertEquals("Dra. Soto", guardado.getNombreMedico());
@@ -46,13 +46,13 @@ class PedirHoraRepositoryTest {
     @Test
     void debeBuscarReservaPorId() {
         PedirHora reserva = new PedirHora(
-            null, 
+            null,
             "33333333-3",
             "María López",
-            "44444444-4", 
+            "44444444-4",
             "Dr. Rojas",
-            LocalDate.of(2026, 7, 1), 
-            LocalTime.of(9, 0), 
+            LocalDate.of(2026, 7, 1),
+            LocalTime.of(9, 0),
             "Control dental"
         );
 
@@ -70,23 +70,24 @@ class PedirHoraRepositoryTest {
         repository.save(new PedirHora(
             null, 
             "55555555-5", 
-            "Pedro Díaz",
+            "Pedro Díaz", 
             "66666666-6", 
             "Dra. Fuentes",
             LocalDate.of(2026, 6, 22), 
-            LocalTime.of(11, 0), "Urgencia dental")
-            );
+            LocalTime.of(11, 0),
+            "Urgencia dental"
+        ));
 
         repository.save(new PedirHora(
             null, 
             "77777777-7", 
-            "Ana Torres",
+            "Ana Torres", 
             "88888888-8", 
             "Dr. Muñoz",
             LocalDate.of(2026, 6, 23), 
             LocalTime.of(15, 30), 
-            "Consulta médica")
-        );
+            "Consulta médica"
+        ));
 
         List<PedirHora> resultado = repository.findAll();
 
@@ -97,13 +98,13 @@ class PedirHoraRepositoryTest {
     @Test
     void debeEliminarReserva() {
         PedirHora reserva = new PedirHora(
-            null, 
-            "99999999-9", 
+            null,
+            "99999999-9",
             "Carlos Vidal",
-            "10101010-1", 
+            "10101010-1",
             "Dra. Castro",
-            LocalDate.of(2026, 8, 5), 
-            LocalTime.of(16, 0), 
+            LocalDate.of(2026, 8, 5),
+            LocalTime.of(16, 0),
             "Control médico"
         );
 
