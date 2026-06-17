@@ -44,22 +44,22 @@ public class FacturacionYPresupuestoServiceTest {
     String tokenDePrueba = "Bearer token-prueba";
 
     FacturacionYPresupuesto facYpre = new FacturacionYPresupuesto(
-        1L, 30.000, "paciente","1-1",
-         "medico","1-2","tratamiento",
+        1L, 30.000, "paciente","11111111-1",
+         "medico","22222222-2","tratamiento",
     8, "gestionPagos");
     when(repo.findById(1L)).thenReturn(Optional.of(facYpre));
 
     PacienteResponse pacienteResponse = new PacienteResponse();
-    pacienteResponse.setRunPaciente("1-1");
+    pacienteResponse.setRunPaciente("11111111-1");
     pacienteResponse.setNombrePaciente("paciente");
     
-    when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(pacienteResponse);
+    when(pacienteClient.getPacienteClient("11111111-1", tokenDePrueba)).thenReturn(pacienteResponse);
 
     MedicoResponse medicoResponse = new MedicoResponse();
-    medicoResponse.setRunMedico("1-2");
+    medicoResponse.setRunMedico("22222222-2");
     medicoResponse.setNombreMedico("medico");
 
-    when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(medicoResponse);
+    when(medicoClient.getMedicoClient("22222222-2", tokenDePrueba)).thenReturn(medicoResponse);
 
     // Act
     FacturacionYPresupuestoResponse resultado = service.obtener(1L, tokenDePrueba);
@@ -71,11 +71,11 @@ public class FacturacionYPresupuestoServiceTest {
 
     assertNotNull(resultado.getPaciente());
     assertEquals("paciente", resultado.getPaciente().getNombrePaciente());
-    assertEquals("1-1", resultado.getPaciente().getRunPaciente());
+    assertEquals("11111111-1", resultado.getPaciente().getRunPaciente());
 
     assertNotNull(resultado.getMedico());
     assertEquals("medico", resultado.getMedico().getNombreMedico());
-    assertEquals("1-2", resultado.getMedico().getRunMedico());
+    assertEquals("22222222-2", resultado.getMedico().getRunMedico());
 
     assertEquals("tratamiento", resultado.getTratamiento());
     assertEquals(8, resultado.getDiasDuracion());
@@ -106,22 +106,22 @@ void deberiaRetornarListaFacturacionYPresupuesto() {
     String tokenDePrueba = "Bearer token-prueba";
 
     FacturacionYPresupuesto facYpre = new FacturacionYPresupuesto( 1L, 30.000, "paciente","1-1",
-     "medico","1-2","tratamiento",
+     "medico","22222222-2","tratamiento",
     8, "gestionPagos");
 
     when(repo.findAll()).thenReturn(List.of(facYpre));
 
     PacienteResponse pacienteResponse = new PacienteResponse();
-    pacienteResponse.setRunPaciente("1-1");
+    pacienteResponse.setRunPaciente("11111111-1");
     pacienteResponse.setNombrePaciente("paciente");
     
-    when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(pacienteResponse);
+    when(pacienteClient.getPacienteClient("11111111-1", tokenDePrueba)).thenReturn(pacienteResponse);
 
     MedicoResponse medicoResponse = new MedicoResponse();
-    medicoResponse.setRunMedico("1-2");
+    medicoResponse.setRunMedico("22222222-2");
     medicoResponse.setNombreMedico("medico");
 
-    when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(medicoResponse);
+    when(medicoClient.getMedicoClient("22222222-2", tokenDePrueba)).thenReturn(medicoResponse);
 
     // Act
     List<FacturacionYPresupuestoResponse> resultado = service.listar(null);
@@ -136,11 +136,11 @@ void deberiaRetornarListaFacturacionYPresupuesto() {
 
     assertNotNull(item.getPaciente());
     assertEquals("paciente", item.getPaciente().getNombrePaciente());
-    assertEquals("1-1", item.getPaciente().getRunPaciente());
+    assertEquals("11111111-1", item.getPaciente().getRunPaciente());
 
     assertNotNull(item.getMedico());
     assertEquals("medico", item.getMedico().getNombreMedico());
-    assertEquals("1-2", item.getMedico().getRunMedico());
+    assertEquals("22222222-2", item.getMedico().getRunMedico());
 
     assertEquals("tratamiento", item.getTratamiento());
     assertEquals(8, item.getDiasDuracion());
@@ -171,28 +171,28 @@ void deberiaCrearFacturacionYPresupuestoCorrectamente() {
                     
                     dto.setPresupuesto(30.000);
                     dto.setNombrePaciente("paciente");    
-                    dto.setRunPaciente("1-1");
+                    dto.setRunPaciente("11111111-1");
                     dto.setNombreMedico("medico");
-                    dto.setRunMedico("1-2");
+                    dto.setRunMedico("22222222-2");
                     dto.setTratamiento("tratamiento");
                     dto.setDiasDuracion(8);
                     dto.setGestionPagos("gestionPagos");
 
 
     PacienteResponse pacienteResponse = new PacienteResponse();
-    pacienteResponse.setRunPaciente("1-1");
+    pacienteResponse.setRunPaciente("11111111-1");
     pacienteResponse.setNombrePaciente("paciente");
     
-    when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(pacienteResponse);
+    when(pacienteClient.getPacienteClient("11111111-1", tokenDePrueba)).thenReturn(pacienteResponse);
 
     MedicoResponse medicoResponse = new MedicoResponse();
-    medicoResponse.setRunMedico("1-2");
+    medicoResponse.setRunMedico("22222222-2");
     medicoResponse.setNombreMedico("medico");
 
-    when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(medicoResponse);
+    when(medicoClient.getMedicoClient("22222222-2", tokenDePrueba)).thenReturn(medicoResponse);
 
     FacturacionYPresupuesto Guardado = new FacturacionYPresupuesto(1L, 30.000, "paciente","1-1",
-     "medico","1-2","tratamiento",
+     "medico","22222222-2","tratamiento",
     8, "gestionPagos");
     when(repo.save(any(FacturacionYPresupuesto.class))).thenReturn(Guardado);
 
@@ -206,7 +206,7 @@ void deberiaCrearFacturacionYPresupuestoCorrectamente() {
 
     assertNotNull(resultado.getPaciente());
     assertEquals("paciente", resultado.getPaciente().getNombrePaciente());
-    assertEquals("1-1", resultado.getPaciente().getRunPaciente());
+    assertEquals("11111111-1", resultado.getPaciente().getRunPaciente());
 
     assertNotNull(resultado.getMedico());
     assertEquals("medico", resultado.getMedico().getNombreMedico());
@@ -224,11 +224,11 @@ void deberiaLanzarExcepcionCuandoPacienteNoExisteAlCrear() {
     FacturacionYPresupuestoDTO dto = new FacturacionYPresupuestoDTO();
     String tokenDePrueba = "Bearer token-prueba";
 
-    dto.setRunPaciente("1-1");
-    when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(null); 
+    dto.setRunPaciente("11111111-1");
+    when(pacienteClient.getPacienteClient("11111111-1", tokenDePrueba)).thenReturn(null); 
 
-    dto.setRunMedico("1-2");
-    when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(null); 
+    dto.setRunMedico("22222222-2");
+    when(medicoClient.getMedicoClient("22222222-2", tokenDePrueba)).thenReturn(null); 
 
     // Act + Assert
     RuntimeException ex = assertThrows(
@@ -246,12 +246,12 @@ void deberiaLanzarExcepcionCuandoMedicoNoExisteAlCrear() {
     FacturacionYPresupuestoDTO dto = new FacturacionYPresupuestoDTO();
     String tokenDePrueba = "Bearer token-prueba";
     
-    dto.setRunPaciente("1-1");
-    when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(null);
+    dto.setRunPaciente("11111111-1");
+    when(pacienteClient.getPacienteClient("11111111-1", tokenDePrueba)).thenReturn(null);
 
-    dto.setRunMedico("1-2");
+    dto.setRunMedico("22222222-2");
     
-    when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(null); 
+    when(medicoClient.getMedicoClient("22222222-2", tokenDePrueba)).thenReturn(null); 
     // Act + Assert
     RuntimeException ex = assertThrows(
             RuntimeException.class,
@@ -268,28 +268,28 @@ void deberiaActualizarFacturacionYPresupuestoCorrectamente() {
     String tokenDePrueba = "Bearer token-prueba";
 
     FacturacionYPresupuesto existente = new FacturacionYPresupuesto(1L, 30.000, "paciente","1-1",
-     "medico","1-2","tratamiento",
+     "medico","22222222-2","tratamiento",
     8, "gestionPagos");
     
     PacienteResponse pacienteResponse = new PacienteResponse();
-    pacienteResponse.setRunPaciente("1-1");
+    pacienteResponse.setRunPaciente("11111111-1");
     pacienteResponse.setNombrePaciente("paciente");
     
-    when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(pacienteResponse);
+    when(pacienteClient.getPacienteClient("11111111-1", tokenDePrueba)).thenReturn(pacienteResponse);
 
     MedicoResponse medicoResponse = new MedicoResponse();
-    medicoResponse.setRunMedico("1-2");
+    medicoResponse.setRunMedico("22222222-2");
     medicoResponse.setNombreMedico("medico");
 
-    when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(medicoResponse);
+    when(medicoClient.getMedicoClient("22222222-2", tokenDePrueba)).thenReturn(medicoResponse);
 
 
     FacturacionYPresupuestoDTO dto = new FacturacionYPresupuestoDTO();
                     dto.setPresupuesto(30.000);
                     dto.setNombrePaciente("paciente");    
-                    dto.setRunPaciente("1-1");
+                    dto.setRunPaciente("11111111-1");
                     dto.setNombreMedico("medico");
-                    dto.setRunMedico("1-2");
+                    dto.setRunMedico("22222222-2");
                     dto.setTratamiento("tratamiento");
                     dto.setDiasDuracion(8);
                     dto.setGestionPagos("gestionPagos");
@@ -308,11 +308,11 @@ void deberiaActualizarFacturacionYPresupuestoCorrectamente() {
 
     assertNotNull(resultado.getPaciente());
     assertEquals("paciente", resultado.getPaciente().getNombrePaciente());
-    assertEquals("1-1", resultado.getPaciente().getRunPaciente());
+    assertEquals("11111111-1", resultado.getPaciente().getRunPaciente());
 
     assertNotNull(resultado.getMedico());
     assertEquals("medico", resultado.getMedico().getNombreMedico());
-    assertEquals("1-2", resultado.getMedico().getRunMedico());
+    assertEquals("22222222-2", resultado.getMedico().getRunMedico());
 
     assertEquals("tratamiento", resultado.getTratamiento());
     assertEquals(8, resultado.getDiasDuracion());

@@ -72,20 +72,32 @@ public class PacienteControllerTest {
 
         when(service.obtener("11111111-1")).thenReturn(autor);
 
-        mockMvc.perform(get("/api/autores/1"))
+        mockMvc.perform(get("/api/v1/pacientes/11111111-1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("Autor obtenido"))
-                .andExpect(jsonPath("$.data.id").value(1))
-                .andExpect(jsonPath("$.data.nombre").value("Jorge Luis Borges"))
-                .andExpect(jsonPath("$.data.anio").value(1899));
+                .andExpect(jsonPath("$.message").value("Paciente obtenido"))
+                .andExpect(jsonPath("$.data[0].run").value("11111111-1"))
+                .andExpect(jsonPath("$.data[0].nombre").value("paciente"))
+                .andExpect(jsonPath("$.data[0].datos").value(28))
+                .andExpect(jsonPath("$.data[0].edad").value("datos del paciente"))
+                .andExpect(jsonPath("$.data[0].alergias").value("alergias"))
+                .andExpect(jsonPath("$.data[0].enfermedad").value("enfermedad"))
+                .andExpect(jsonPath("$.data[0].queMedicamentoEstaTomando").value("medicamento"))
+                .andExpect(jsonPath("$.data[0].nroTelefono").value("123456789"));
     }
 
     @Test
     void debeCrearPaciente() throws Exception {
         PacienteDTO dto = new PacienteDTO();
-        dto.setNombre("Pablo Neruda");
-        dto.setAnio(1904);
+
+        dto.setRunPaciente("11111111-1");
+        dto.setNombrePaciente("paciente");
+        dto.setDatosDelPaciente("datos del paciente");
+        dto.setEdadPaciente(28);
+        dto.setAlergias("alergias"); 
+        dto.setEnfermedad("enfermedad"); 
+        dto.setQueMedicamentoEstaTomando("medicamento"); 
+        dto.setNroTelefono("123456789");
 
         Paciente creado = new Paciente("11111111-1", "paciente", "datos del paciente",
             28,"alergias","enfermedad",
@@ -95,21 +107,33 @@ public class PacienteControllerTest {
 
         when(service.crear(any(PacienteDTO.class))).thenReturn(creado);
 
-        mockMvc.perform(post("/api/autores")
+        mockMvc.perform(post("/api/v1/pacientes")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("Autor creado"))
-                .andExpect(jsonPath("$.data.nombre").value("Pablo Neruda"))
-                .andExpect(jsonPath("$.data.anio").value(1904));
+                .andExpect(jsonPath("$.message").value("Paciente creado"))
+                .andExpect(jsonPath("$.data[0].run").value("11111111-1"))
+                .andExpect(jsonPath("$.data[0].nombre").value("paciente"))
+                .andExpect(jsonPath("$.data[0].datos").value(28))
+                .andExpect(jsonPath("$.data[0].edad").value("datos del paciente"))
+                .andExpect(jsonPath("$.data[0].alergias").value("alergias"))
+                .andExpect(jsonPath("$.data[0].enfermedad").value("enfermedad"))
+                .andExpect(jsonPath("$.data[0].queMedicamentoEstaTomando").value("medicamento"))
+                .andExpect(jsonPath("$.data[0].nroTelefono").value("123456789"));
     }
 
     @Test
     void debeActualizarPaciente() throws Exception {
         PacienteDTO dto = new PacienteDTO();
-        dto.setNombre("Paciente Actualizado");
-        dto.setAnio(2000);
+        dto.setRunPaciente("11111111-1");
+        dto.setNombrePaciente("paciente");
+        dto.setDatosDelPaciente("datos del paciente");
+        dto.setEdadPaciente(28);
+        dto.setAlergias("alergias"); 
+        dto.setEnfermedad("enfermedad"); 
+        dto.setQueMedicamentoEstaTomando("medicamento"); 
+        dto.setNroTelefono("123456789");
 
         Paciente actualizado = new Paciente("11111111-1", "paciente", "datos del paciente",
             28,"alergias","enfermedad",
@@ -119,24 +143,30 @@ public class PacienteControllerTest {
 
         when(service.actualizar(eq("11111111-1"), any(PacienteDTO.class))).thenReturn(actualizado);
 
-        mockMvc.perform(put("/api/autores/1")
+        mockMvc.perform(put("/api/v1/pacientes/11111111-1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("Autor actualizado"))
-                .andExpect(jsonPath("$.data.nombre").value("Autor Actualizado"))
-                .andExpect(jsonPath("$.data.anio").value(2000));
+                .andExpect(jsonPath("$.message").value("Paciente actualizado"))
+                .andExpect(jsonPath("$.data[0].run").value("11111111-1"))
+                .andExpect(jsonPath("$.data[0].nombre").value("paciente"))
+                .andExpect(jsonPath("$.data[0].datos").value(28))
+                .andExpect(jsonPath("$.data[0].edad").value("datos del paciente"))
+                .andExpect(jsonPath("$.data[0].alergias").value("alergias"))
+                .andExpect(jsonPath("$.data[0].enfermedad").value("enfermedad"))
+                .andExpect(jsonPath("$.data[0].queMedicamentoEstaTomando").value("medicamento"))
+                .andExpect(jsonPath("$.data[0].nroTelefono").value("123456789"));
     }
 
     @Test
     void debeEliminarPaciente() throws Exception {
         doNothing().when(service).eliminar("11111111-1");
 
-        mockMvc.perform(delete("/api/autores/1"))
+        mockMvc.perform(delete("/api/v1/pacientes/11111111-1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("Autor eliminado"));
+                .andExpect(jsonPath("$.message").value("Paciente eliminado"));
     }
 }
 

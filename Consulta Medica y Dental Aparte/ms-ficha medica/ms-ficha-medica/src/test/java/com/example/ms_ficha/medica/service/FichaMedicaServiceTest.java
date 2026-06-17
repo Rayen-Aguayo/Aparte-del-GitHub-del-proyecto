@@ -45,28 +45,28 @@ public class FichaMedicaServiceTest {
     String tokenDePrueba = "Bearer token-prueba";
 
     FichaMedica fichaMedica = new FichaMedica(
-        1L, "paciente","1-1",
-         "medico","1-2","procedimiento",
+        1L, "paciente","11111111-1",
+         "medico","22222222-2","procedimiento",
     "queMedicamentoEstaTomando", "enfermedad",
     "alergias","odontograma");
 
     when(repo.findById(1L)).thenReturn(Optional.of(fichaMedica));
 
     PacienteResponse pacienteResponse = new PacienteResponse();
-    pacienteResponse.setRunPaciente("1-1");
+    pacienteResponse.setRunPaciente("11111111-1");
     pacienteResponse.setNombrePaciente("paciente");
     pacienteResponse.setAlergias("alergias");
     pacienteResponse.setEnfermedad("enfermedad");
     pacienteResponse.setQueMedicamentoEstaTomando("queMedicamentoEstaTomando");
     
     
-    when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(pacienteResponse);
+    when(pacienteClient.getPacienteClient("11111111-1", tokenDePrueba)).thenReturn(pacienteResponse);
 
     MedicoResponse medicoResponse = new MedicoResponse();
-    medicoResponse.setRunMedico("1-2");
+    medicoResponse.setRunMedico("22222222-2");
     medicoResponse.setNombreMedico("medico");
 
-    when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(medicoResponse);
+    when(medicoClient.getMedicoClient("22222222-2", tokenDePrueba)).thenReturn(medicoResponse);
 
     // Act
     FichaMedicaResponse resultado = service.obtener(1L, tokenDePrueba);
@@ -76,7 +76,7 @@ public class FichaMedicaServiceTest {
     assertEquals(1L, resultado.getId());
 
     assertNotNull(resultado.getPaciente());
-    assertEquals("1-1", resultado.getPaciente().getRunPaciente());
+    assertEquals("11111111-1", resultado.getPaciente().getRunPaciente());
     assertEquals("paciente", resultado.getPaciente().getNombrePaciente());
     assertEquals("alergias", resultado.getPaciente().getAlergias());
     assertEquals("enfermedad", resultado.getPaciente().getEnfermedad());
@@ -85,7 +85,7 @@ public class FichaMedicaServiceTest {
 
     assertNotNull(resultado.getMedico());
     assertEquals("medico", resultado.getMedico().getNombreMedico());
-    assertEquals("1-2", resultado.getMedico().getRunMedico());
+    assertEquals("22222222-2", resultado.getMedico().getRunMedico());
 
     assertEquals("procedimiento", resultado.getProcedimiento());
     assertEquals("odontograma", resultado.getOdontograma());
@@ -115,27 +115,27 @@ void deberiaRetornarListaFichaMedica() {
     String tokenDePrueba = "Bearer token-prueba";
 
     FichaMedica fichaMedica = new FichaMedica( 
-        1L, "paciente","1-1",
-         "medico","1-2","procedimiento",
+        1L, "paciente","11111111-1",
+         "22222222-2","medico","procedimiento",
     "queMedicamentoEstaTomando", "enfermedad",
     "alergias","odontograma");
 
     when(repo.findAll()).thenReturn(List.of(fichaMedica));
 
     PacienteResponse pacienteResponse = new PacienteResponse();
-    pacienteResponse.setRunPaciente("1-1");
+    pacienteResponse.setRunPaciente("11111111-1");
     pacienteResponse.setNombrePaciente("paciente");
     pacienteResponse.setAlergias("alergias");
     pacienteResponse.setEnfermedad("enfermedad");
     pacienteResponse.setQueMedicamentoEstaTomando("queMedicamentoEstaTomando");
     
-    when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(pacienteResponse);
+    when(pacienteClient.getPacienteClient("11111111-1", tokenDePrueba)).thenReturn(pacienteResponse);
 
     MedicoResponse medicoResponse = new MedicoResponse();
-    medicoResponse.setRunMedico("1-2");
+    medicoResponse.setRunMedico("22222222-2");
     medicoResponse.setNombreMedico("medico");
 
-    when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(medicoResponse);
+    when(medicoClient.getMedicoClient("22222222-2", tokenDePrueba)).thenReturn(medicoResponse);
 
     // Act
     List<FichaMedicaResponse> resultado = service.listar(null);
@@ -147,7 +147,7 @@ void deberiaRetornarListaFichaMedica() {
     FichaMedicaResponse item = resultado.get(0);
 
     assertNotNull(item.getPaciente());
-    assertEquals("1-1", item.getPaciente().getRunPaciente());   
+    assertEquals("11111111-1", item.getPaciente().getRunPaciente());   
     assertEquals("paciente", item.getPaciente().getNombrePaciente());
     assertEquals("alergias", item.getPaciente().getAlergias());
     assertEquals("enfermedad", item.getPaciente().getEnfermedad());
@@ -155,7 +155,7 @@ void deberiaRetornarListaFichaMedica() {
 
     assertNotNull(item.getMedico());
     assertEquals("medico", item.getMedico().getNombreMedico());
-    assertEquals("1-2", item.getMedico().getRunMedico());
+    assertEquals("22222222-2", item.getMedico().getRunMedico());
 
     assertEquals("procedimiento", item.getProcedimiento());
     assertEquals("odontograma", item.getOdontograma());
@@ -183,9 +183,9 @@ void deberiaCrearFichaMedicaCorrectamente() {
 
     FichaMedicaDTO dto = new FichaMedicaDTO();
                     
-                    dto.setRunPaciente("1-1");
+                    dto.setRunPaciente("11111111-1");
                     dto.setNombrePaciente("paciente");
-                    dto.setRunMedico("1-2");
+                    dto.setRunMedico("22222222-2");
                     dto.setNombreMedico("medico");
                     dto.setProcedimiento("Procedimiento");
                     dto.setQueMedicamentoEstaTomando("QueMedicamentoEstaTomando");
@@ -195,24 +195,24 @@ void deberiaCrearFichaMedicaCorrectamente() {
 
 
     PacienteResponse pacienteResponse = new PacienteResponse();
-    pacienteResponse.setRunPaciente("1-1");
+    pacienteResponse.setRunPaciente("11111111-1");
     pacienteResponse.setNombrePaciente("paciente");
     pacienteResponse.setAlergias("alergias");
     pacienteResponse.setEnfermedad("enfermedad");
     pacienteResponse.setQueMedicamentoEstaTomando("queMedicamentoEstaTomando");
     
     
-    when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(pacienteResponse);
+    when(pacienteClient.getPacienteClient("11111111-1", tokenDePrueba)).thenReturn(pacienteResponse);
 
     MedicoResponse medicoResponse = new MedicoResponse();
-    medicoResponse.setRunMedico("1-2");
+    medicoResponse.setRunMedico("22222222-2");
     medicoResponse.setNombreMedico("medico");
 
-    when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(medicoResponse);
+    when(medicoClient.getMedicoClient("22222222-2", tokenDePrueba)).thenReturn(medicoResponse);
 
     FichaMedica guardado = new FichaMedica( 
-        1L, "1-1", "paciente",
-        "1-2", "medico", "procedimiento",
+        1L, "11111111-1", "paciente",
+        "22222222-2", "medico", "procedimiento",
         "queMedicamentoEstaTomando", "enfermedad",
         "alergias", "odontograma");
     when(repo.save(any(FichaMedica.class))).thenReturn(guardado);
@@ -223,7 +223,7 @@ void deberiaCrearFichaMedicaCorrectamente() {
     // Assert
     assertNotNull(resultado);
     assertNotNull(resultado.getPaciente());
-    assertEquals("1-1", resultado.getPaciente().getRunPaciente());
+    assertEquals("11111111-1", resultado.getPaciente().getRunPaciente());
     assertEquals("paciente", resultado.getPaciente().getNombrePaciente());
     assertEquals("alergias", resultado.getPaciente().getAlergias());
     assertEquals("enfermedad", resultado.getPaciente().getEnfermedad());
@@ -232,7 +232,7 @@ void deberiaCrearFichaMedicaCorrectamente() {
 
     assertNotNull(resultado.getMedico());
     assertEquals("medico", resultado.getMedico().getNombreMedico());
-    assertEquals("1-2", resultado.getMedico().getRunMedico());
+    assertEquals("22222222-2", resultado.getMedico().getRunMedico());
 
     assertEquals("procedimiento", resultado.getProcedimiento());
     assertEquals("odontograma", resultado.getOdontograma());
@@ -245,8 +245,8 @@ void deberiaLanzarExcepcionCuandoPacienteNoExisteAlCrear() {
     String tokenDePrueba = "Bearer token-prueba";
 
     FichaMedicaDTO dto = new FichaMedicaDTO();
-    dto.setRunPaciente("1-1");
-    when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(null); 
+    dto.setRunPaciente("11111111-1");
+    when(pacienteClient.getPacienteClient("11111111-1", tokenDePrueba)).thenReturn(null); 
 
 
     // Act + Assert
@@ -264,14 +264,14 @@ void deberiaLanzarExcepcionCuandoMedicoNoExisteAlCrear() {
     // Arrange
     String tokenDePrueba = "Bearer token-prueba";
     FichaMedicaDTO dto = new FichaMedicaDTO();
-    dto.setRunPaciente("1-1");
-    dto.setRunMedico("1-2");
+    dto.setRunPaciente("11111111-1");
+    dto.setRunMedico("22222222-2");
 
     PacienteResponse pacienteResponse = new PacienteResponse();
-    pacienteResponse.setRunPaciente("1-1");
-    when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(pacienteResponse);
+    pacienteResponse.setRunPaciente("11111111-1");
+    when(pacienteClient.getPacienteClient("11111111-1", tokenDePrueba)).thenReturn(pacienteResponse);
 
-    when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(null);
+    when(medicoClient.getMedicoClient("22222222-2", tokenDePrueba)).thenReturn(null);
 
     RuntimeException ex = assertThrows(
             RuntimeException.class,
@@ -288,32 +288,32 @@ void deberiaActualizarFichaMedicaCorrectamente() {
     String tokenDePrueba = "Bearer token-prueba";
 
     FichaMedica existente = new FichaMedica( 
-        1L, "1-1","paciente",
-         "medico","1-2","procedimiento",
+        1L, "11111111-1","paciente",
+         "22222222-2","medico","procedimiento",
     "queMedicamentoEstaTomando", "enfermedad",
     "alergias","odontograma");
     
     PacienteResponse pacienteResponse = new PacienteResponse();
-    pacienteResponse.setRunPaciente("1-1");
+    pacienteResponse.setRunPaciente("11111111-1");
     pacienteResponse.setNombrePaciente("paciente");
     pacienteResponse.setAlergias("alergias");
     pacienteResponse.setEnfermedad("enfermedad");
     pacienteResponse.setQueMedicamentoEstaTomando("queMedicamentoEstaTomando");
     
     
-    when(pacienteClient.getPacienteClient("1-1", tokenDePrueba)).thenReturn(pacienteResponse);
+    when(pacienteClient.getPacienteClient("11111111-1", tokenDePrueba)).thenReturn(pacienteResponse);
 
     MedicoResponse medicoResponse = new MedicoResponse();
-    medicoResponse.setRunMedico("1-2");
+    medicoResponse.setRunMedico("22222222-2");
     medicoResponse.setNombreMedico("medico");
 
-    when(medicoClient.getMedicoClient("1-2", tokenDePrueba)).thenReturn(medicoResponse);
+    when(medicoClient.getMedicoClient("22222222-2", tokenDePrueba)).thenReturn(medicoResponse);
 
 
     FichaMedicaDTO dto = new FichaMedicaDTO();
-                    dto.setRunPaciente("1-1");
+                    dto.setRunPaciente("11111111-1");
                     dto.setNombrePaciente("paciente");
-                    dto.setRunMedico("1-2");
+                    dto.setRunMedico("22222222-2");
                     dto.setNombreMedico("medico");
                     dto.setProcedimiento("Procedimiento");
                     dto.setQueMedicamentoEstaTomando("QueMedicamentoEstaTomando");
@@ -331,7 +331,7 @@ void deberiaActualizarFichaMedicaCorrectamente() {
     // Assert
     assertNotNull(resultado);
     assertNotNull(resultado.getPaciente());
-    assertEquals("1-1", resultado.getPaciente().getRunPaciente());
+    assertEquals("11111111-1", resultado.getPaciente().getRunPaciente());
     assertEquals("paciente", resultado.getPaciente().getNombrePaciente());
     assertEquals("alergias", resultado.getPaciente().getAlergias());
     assertEquals("enfermedad", resultado.getPaciente().getEnfermedad());
@@ -340,7 +340,7 @@ void deberiaActualizarFichaMedicaCorrectamente() {
 
     assertNotNull(resultado.getMedico());
     assertEquals("medico", resultado.getMedico().getNombreMedico());
-    assertEquals("1-2", resultado.getMedico().getRunMedico());
+    assertEquals("22222222-2", resultado.getMedico().getRunMedico());
 
     assertEquals("Procedimiento", resultado.getProcedimiento());
     assertEquals("Odontograma", resultado.getOdontograma());
