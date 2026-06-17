@@ -1,0 +1,138 @@
+package com.example.ms_paciente.controller;
+
+
+import com.example.ms_paciente.dto.PacienteDTO;
+import com.example.ms_paciente.model.Paciente;
+import com.example.ms_paciente.service.PacienteService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+
+import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@WebMvcTest(PacienteController.class)
+@AutoConfigureMockMvc(addFilters = false)
+
+public class PacienteControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @MockitoBean
+    private PacienteService service;
+
+    @Test
+    void debeListarPacientes() throws Exception {
+        List<Paciente> pacientes = List.of(
+                new Paciente("11111111-1", "paciente", "datos del paciente",
+            28,"alergias","enfermedad",
+            "medicamento","123456789"
+        ));
+
+
+        when(service.listar()).thenReturn(pacientes);
+
+        mockMvc.perform(get("/api/autores"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Listado obtenido"))
+                .andExpect(jsonPath("$.data[0].id").value(1))
+                .andExpect(jsonPath("$.data[0].nombre").value("Gabriel García Márquez"))
+                .andExpect(jsonPath("$.data[0].anio").value(1927));
+    }
+
+    @Test
+    void debeObtenerPacientePorId() throws Exception {
+        Paciente autor = new Paciente("11111111-1", "paciente", "datos del paciente",
+            28,"alergias","enfermedad",
+            "medicamento","123456789"
+        );
+
+
+        when(service.obtener("11111111-1")).thenReturn(autor);
+
+        mockMvc.perform(get("/api/autores/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Autor obtenido"))
+                .andExpect(jsonPath("$.data.id").value(1))
+                .andExpect(jsonPath("$.data.nombre").value("Jorge Luis Borges"))
+                .andExpect(jsonPath("$.data.anio").value(1899));
+    }
+
+    @Test
+    void debeCrearPaciente() throws Exception {
+        PacienteDTO dto = new PacienteDTO();
+        dto.setNombre("Pablo Neruda");
+        dto.setAnio(1904);
+
+        Paciente creado = new Paciente("11111111-1", "paciente", "datos del paciente",
+            28,"alergias","enfermedad",
+            "medicamento","123456789"
+        );
+
+
+        when(service.crear(any(PacienteDTO.class))).thenReturn(creado);
+
+        mockMvc.perform(post("/api/autores")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Autor creado"))
+                .andExpect(jsonPath("$.data.nombre").value("Pablo Neruda"))
+                .andExpect(jsonPath("$.data.anio").value(1904));
+    }
+
+    @Test
+    void debeActualizarPaciente() throws Exception {
+        PacienteDTO dto = new PacienteDTO();
+        dto.setNombre("Paciente Actualizado");
+        dto.setAnio(2000);
+
+        Paciente actualizado = new Paciente("11111111-1", "paciente", "datos del paciente",
+            28,"alergias","enfermedad",
+            "medicamento","123456789"
+        );
+
+
+        when(service.actualizar(eq("11111111-1"), any(PacienteDTO.class))).thenReturn(actualizado);
+
+        mockMvc.perform(put("/api/autores/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Autor actualizado"))
+                .andExpect(jsonPath("$.data.nombre").value("Autor Actualizado"))
+                .andExpect(jsonPath("$.data.anio").value(2000));
+    }
+
+    @Test
+    void debeEliminarPaciente() throws Exception {
+        doNothing().when(service).eliminar("11111111-1");
+
+        mockMvc.perform(delete("/api/autores/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Autor eliminado"));
+    }
+}
+
