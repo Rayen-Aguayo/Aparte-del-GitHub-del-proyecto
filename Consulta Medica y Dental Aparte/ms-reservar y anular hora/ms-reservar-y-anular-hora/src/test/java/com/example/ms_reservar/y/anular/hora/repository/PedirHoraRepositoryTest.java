@@ -3,7 +3,7 @@ package com.example.ms_reservar.y.anular.hora.repository;
 import com.example.ms_reservar.y.anular.hora.model.PedirHora;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
@@ -45,7 +45,7 @@ class PedirHoraRepositoryTest {
     void debeBuscarReservaPorId() {
         PedirHora reserva = new PedirHora(
             null, 
-            "33333333-3", 
+            "33333333-3",
             "María López",
             "44444444-4", 
             "Dr. Rojas",
@@ -72,9 +72,8 @@ class PedirHoraRepositoryTest {
             "66666666-6", 
             "Dra. Fuentes",
             LocalDate.of(2026, 6, 22), 
-            LocalTime.of(11, 0), 
-            "Urgencia dental")
-        );
+            LocalTime.of(11, 0), "Urgencia dental")
+            );
 
         repository.save(new PedirHora(
             null, 
