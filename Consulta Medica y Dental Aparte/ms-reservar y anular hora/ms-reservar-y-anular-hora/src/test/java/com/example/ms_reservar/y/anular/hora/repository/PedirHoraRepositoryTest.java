@@ -36,7 +36,7 @@ class PedirHoraRepositoryTest {
         );
 
         PedirHora guardado = repository.save(reserva);
-        
+
         assertNotNull(guardado.getId());
         assertEquals("Juan Pérez", guardado.getNombrePaciente());
         assertEquals("Dra. Soto", guardado.getNombreMedico());
