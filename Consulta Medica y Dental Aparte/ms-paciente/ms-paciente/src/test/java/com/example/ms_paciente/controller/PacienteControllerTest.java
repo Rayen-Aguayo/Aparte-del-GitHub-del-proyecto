@@ -7,10 +7,8 @@ import com.example.ms_paciente.service.PacienteService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -49,13 +47,19 @@ public class PacienteControllerTest {
 
         when(service.listar()).thenReturn(pacientes);
 
-        mockMvc.perform(get("/api/autores"))
+        mockMvc.perform(get("/api/v1/pacientes"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value("Listado obtenido"))
-                .andExpect(jsonPath("$.data[0].id").value(1))
-                .andExpect(jsonPath("$.data[0].nombre").value("Gabriel García Márquez"))
-                .andExpect(jsonPath("$.data[0].anio").value(1927));
+                .andExpect(jsonPath("$.data[0].run").value("11111111-1"))
+                .andExpect(jsonPath("$.data[0].nombre").value("paciente"))
+                .andExpect(jsonPath("$.data[0].datos").value(28))
+                .andExpect(jsonPath("$.data[0].edad").value("datos del paciente"))
+                .andExpect(jsonPath("$.data[0].alergias").value("alergias"))
+                .andExpect(jsonPath("$.data[0].enfermedad").value("enfermedad"))
+                .andExpect(jsonPath("$.data[0].queMedicamentoEstaTomando").value("medicamento"))
+                .andExpect(jsonPath("$.data[0].nroTelefono").value("123456789"));
+
     }
 
     @Test
