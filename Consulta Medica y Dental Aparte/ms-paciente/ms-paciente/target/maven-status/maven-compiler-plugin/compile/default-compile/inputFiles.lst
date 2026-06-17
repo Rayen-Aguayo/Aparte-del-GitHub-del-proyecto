@@ -1,0 +1,12 @@
+D:\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-paciente\ms-paciente\src\main\java\com\example\ms_paciente\config\OpenApiConfig.java
+D:\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-paciente\ms-paciente\src\main\java\com\example\ms_paciente\config\SecurityConfig.java
+D:\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-paciente\ms-paciente\src\main\java\com\example\ms_paciente\controller\PacienteController.java
+D:\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-paciente\ms-paciente\src\main\java\com\example\ms_paciente\dto\ApiResponse.java
+D:\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-paciente\ms-paciente\src\main\java\com\example\ms_paciente\dto\PacienteDTO.java
+D:\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-paciente\ms-paciente\src\main\java\com\example\ms_paciente\exception\GlobalExceptionHandler.java
+D:\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-paciente\ms-paciente\src\main\java\com\example\ms_paciente\model\Paciente.java
+D:\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-paciente\ms-paciente\src\main\java\com\example\ms_paciente\MsPacienteApplication.java
+D:\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-paciente\ms-paciente\src\main\java\com\example\ms_paciente\repository\PacienteRepository.java
+D:\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-paciente\ms-paciente\src\main\java\com\example\ms_paciente\security\JwtFilter.java
+D:\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-paciente\ms-paciente\src\main\java\com\example\ms_paciente\security\JwtUtil.java
+D:\Aparte-del-GitHub-del-proyecto\Consulta Medica y Dental Aparte\ms-paciente\ms-paciente\src\main\java\com\example\ms_paciente\service\PacienteService.java

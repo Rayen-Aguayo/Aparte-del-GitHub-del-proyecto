@@ -2,13 +2,11 @@ package com.example.ms_paciente.repository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+
 import org.springframework.test.context.ActiveProfiles;
 
 import com.example.ms_paciente.model.Paciente;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,8 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @ActiveProfiles("test")
-@Entity
-@Table(name = "paciente")
 public class PacienteRepositoryTest {
 
     @Autowired
