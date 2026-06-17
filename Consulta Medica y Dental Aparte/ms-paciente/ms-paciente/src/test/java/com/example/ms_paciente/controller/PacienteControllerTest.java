@@ -84,8 +84,15 @@ public class PacienteControllerTest {
     @Test
     void debeCrearPaciente() throws Exception {
         PacienteDTO dto = new PacienteDTO();
-        dto.setNombre("Pablo Neruda");
-        dto.setAnio(1904);
+
+        dto.setRunPaciente("11111111-1");
+        dto.setNombrePaciente("paciente");
+        dto.setDatosDelPaciente("datos del paciente");
+        dto.setEdadPaciente(28);
+        dto.setAlergias("alergias"); 
+        dto.setEnfermedad("enfermedad"); 
+        dto.setQueMedicamentoEstaTomando("medicamento"); 
+        dto.setNroTelefono("123456789");
 
         Paciente creado = new Paciente("11111111-1", "paciente", "datos del paciente",
             28,"alergias","enfermedad",
@@ -100,16 +107,28 @@ public class PacienteControllerTest {
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("Autor creado"))
-                .andExpect(jsonPath("$.data.nombre").value("Pablo Neruda"))
-                .andExpect(jsonPath("$.data.anio").value(1904));
+                .andExpect(jsonPath("$.message").value("Paciente creado"))
+                .andExpect(jsonPath("$.data[0].run").value("11111111-1"))
+                .andExpect(jsonPath("$.data[0].nombre").value("paciente"))
+                .andExpect(jsonPath("$.data[0].datos").value(28))
+                .andExpect(jsonPath("$.data[0].edad").value("datos del paciente"))
+                .andExpect(jsonPath("$.data[0].alergias").value("alergias"))
+                .andExpect(jsonPath("$.data[0].enfermedad").value("enfermedad"))
+                .andExpect(jsonPath("$.data[0].queMedicamentoEstaTomando").value("medicamento"))
+                .andExpect(jsonPath("$.data[0].nroTelefono").value("123456789"));
     }
 
     @Test
     void debeActualizarPaciente() throws Exception {
         PacienteDTO dto = new PacienteDTO();
-        dto.setNombre("Paciente Actualizado");
-        dto.setAnio(2000);
+        dto.setRunPaciente("11111111-1");
+        dto.setNombrePaciente("paciente");
+        dto.setDatosDelPaciente("datos del paciente");
+        dto.setEdadPaciente(28);
+        dto.setAlergias("alergias"); 
+        dto.setEnfermedad("enfermedad"); 
+        dto.setQueMedicamentoEstaTomando("medicamento"); 
+        dto.setNroTelefono("123456789");
 
         Paciente actualizado = new Paciente("11111111-1", "paciente", "datos del paciente",
             28,"alergias","enfermedad",
@@ -124,9 +143,15 @@ public class PacienteControllerTest {
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("Autor actualizado"))
-                .andExpect(jsonPath("$.data.nombre").value("Autor Actualizado"))
-                .andExpect(jsonPath("$.data.anio").value(2000));
+                .andExpect(jsonPath("$.message").value("Paciente actualizado"))
+                .andExpect(jsonPath("$.data[0].run").value("11111111-1"))
+                .andExpect(jsonPath("$.data[0].nombre").value("paciente"))
+                .andExpect(jsonPath("$.data[0].datos").value(28))
+                .andExpect(jsonPath("$.data[0].edad").value("datos del paciente"))
+                .andExpect(jsonPath("$.data[0].alergias").value("alergias"))
+                .andExpect(jsonPath("$.data[0].enfermedad").value("enfermedad"))
+                .andExpect(jsonPath("$.data[0].queMedicamentoEstaTomando").value("medicamento"))
+                .andExpect(jsonPath("$.data[0].nroTelefono").value("123456789"));
     }
 
     @Test
@@ -136,7 +161,7 @@ public class PacienteControllerTest {
         mockMvc.perform(delete("/api/autores/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("Autor eliminado"));
+                .andExpect(jsonPath("$.message").value("Paciente eliminado"));
     }
 }
 
