@@ -1,0 +1,14 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+,com.example.ms_reservar.y.anular.hora.security,JwtUtil,41,8,2,0,11,3,5,1,4,1
+,com.example.ms_reservar.y.anular.hora.security,JwtFilter,94,4,14,0,25,1,9,1,2,1
+,com.example.ms_reservar.y.anular.hora.service,PedirHoraService,0,212,0,8,0,51,0,14,0,10
+,com.example.ms_reservar.y.anular.hora,MsReservarYAnularHoraApplication,5,3,0,0,2,1,1,1,1,1
+,com.example.ms_reservar.y.anular.hora.config,WebClientConfig,0,6,0,0,0,2,0,2,0,2
+,com.example.ms_reservar.y.anular.hora.config,SecurityConfig,42,64,0,0,16,14,2,7,2,7
+,com.example.ms_reservar.y.anular.hora.config,OpenApiConfig,0,42,0,0,0,14,0,2,0,2
+,com.example.ms_reservar.y.anular.hora.controller,PedirHoraController,131,0,0,0,42,0,5,0,5,0
+,com.example.ms_reservar.y.anular.hora.client,PacienteClient.new ParameterizedTypeReference() {...},3,0,0,0,1,0,1,0,1,0
+,com.example.ms_reservar.y.anular.hora.client,PacienteClient,33,0,2,0,7,0,2,0,1,0
+,com.example.ms_reservar.y.anular.hora.client,MedicoClient,33,0,2,0,7,0,2,0,1,0
+,com.example.ms_reservar.y.anular.hora.client,MedicoClient.new ParameterizedTypeReference() {...},3,0,0,0,1,0,1,0,1,0
+,com.example.ms_reservar.y.anular.hora.exception,GlobalExceptionHandler,40,3,0,0,14,1,3,1,3,1
