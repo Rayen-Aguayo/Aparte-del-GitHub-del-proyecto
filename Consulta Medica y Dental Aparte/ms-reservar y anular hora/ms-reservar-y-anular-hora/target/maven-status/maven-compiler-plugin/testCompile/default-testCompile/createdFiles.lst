@@ -1,0 +1,4 @@
+com\example\ms_reservar\y\anular\hora\controller\PedirHoraControllerTest.class
+com\example\ms_reservar\y\anular\hora\MsReservarYAnularHoraApplicationTests.class
+com\example\ms_reservar\y\anular\hora\service\PedirHoraServiceTest.class
+com\example\ms_reservar\y\anular\hora\repository\PedirHoraRepositoryTest.class
