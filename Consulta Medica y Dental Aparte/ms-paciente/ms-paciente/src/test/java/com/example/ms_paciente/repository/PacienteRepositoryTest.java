@@ -4,12 +4,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
-import com.example.ms_paciente.model.Paciente;
-
-//import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
 import java.util.Optional;
+import com.example.ms_paciente.model.Paciente;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,9 +21,15 @@ public class PacienteRepositoryTest {
 
     @Test
     void debeGuardarPaciente() {
-        Paciente paciente = new Paciente("11111111-1", "paciente", "datos del paciente",
-            28,"alergias","enfermedad",
-            "medicamento","123456789"
+        Paciente paciente = new Paciente(
+            "11111111-1", 
+            "paciente", 
+            "datos del paciente",
+            28,
+            "alergias"
+            ,"enfermedad",
+            "medicamento"
+            ,"123456789"
         );
 
         Paciente guardado = repository.save(paciente);
@@ -43,9 +48,15 @@ public class PacienteRepositoryTest {
 
     @Test
     void debeBuscarPacientePorId() {
-        Paciente paciente = new Paciente("11111111-1", "paciente", "datos del paciente",
-            28,"alergias","enfermedad",
-            "medicamento","123456789"
+        Paciente paciente = new Paciente(
+            "11111111-1", 
+            "paciente", 
+            "datos del paciente",
+            28,
+            "alergias",
+            "enfermedad",
+            "medicamento",
+            "123456789"
         );
         Paciente guardado = repository.save(paciente);
 
