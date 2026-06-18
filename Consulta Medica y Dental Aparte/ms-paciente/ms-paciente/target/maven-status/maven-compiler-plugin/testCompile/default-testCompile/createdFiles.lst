@@ -1,0 +1,4 @@
+com\example\ms_paciente\controller\PacienteControllerTest.class
+com\example\ms_paciente\service\PacienteServiceTest.class
+com\example\ms_paciente\MsPacienteApplicationTests.class
+com\example\ms_paciente\repository\PacienteRepositoryTest.class
