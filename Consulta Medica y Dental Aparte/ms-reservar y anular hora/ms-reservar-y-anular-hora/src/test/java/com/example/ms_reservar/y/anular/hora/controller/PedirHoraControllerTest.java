@@ -8,9 +8,10 @@ import com.example.ms_reservar.y.anular.hora.service.PedirHoraService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -74,6 +75,7 @@ class PedirHoraControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void debeCrearReserva() throws Exception {
         PedirHoraDTO dto = crearDtoDePrueba();
         PedirHoraResponse creado = respuestaDePrueba(1L);
@@ -94,6 +96,7 @@ class PedirHoraControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void debeRechazarCreacionConDatosInvalidos() throws Exception {
         PedirHoraDTO dto = new PedirHoraDTO(); // todos los campos vacíos/nulos
 
@@ -106,6 +109,7 @@ class PedirHoraControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void debeListarReservas() throws Exception {
         when(service.listar(anyString())).thenReturn(List.of(respuestaDePrueba(1L)));
 
@@ -119,6 +123,7 @@ class PedirHoraControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = {"USER", "ADMIN"})
     void debeObtenerReservaPorId() throws Exception {
         when(service.obtener(1L, token)).thenReturn(respuestaDePrueba(1L));
 
@@ -131,6 +136,7 @@ class PedirHoraControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = {"USER", "ADMIN"})
     void debeActualizarReserva() throws Exception {
         PedirHoraDTO dto = crearDtoDePrueba();
         dto.setAtencion("Control");
@@ -151,6 +157,7 @@ class PedirHoraControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = {"USER", "ADMIN"})
     void debeEliminarReserva() throws Exception {
         doNothing().when(service).eliminar(1L);
 
